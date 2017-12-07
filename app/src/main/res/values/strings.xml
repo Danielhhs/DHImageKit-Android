@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DHImageKitAndroid</string>
+    <string-array name="components">
+        <item>Brightness</item>
+        <item>Contrast</item>
+    </string-array>
+</resources>
