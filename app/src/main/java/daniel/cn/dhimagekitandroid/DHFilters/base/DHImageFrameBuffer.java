@@ -10,18 +10,21 @@ import android.util.Log;
 public class DHImageFrameBuffer {
     private int width;
     private int height;
+    private DHImageTextureOptions textureOptions;
     private int frameBufferReferenceCount;
     private boolean referenceCountDisabled;
     private boolean missingFrameBuffer;
     private int framebuffer;
     private int texture;
 
-    public DHImageFrameBuffer(int width, int hight) {
+    public DHImageFrameBuffer(int width, int height) {
+        this(width, height, new DHImageTextureOptions(), false);
     }
 
-    public DHImageFrameBuffer(int width, int height, boolean onlyGenerateTexture) {
+    public DHImageFrameBuffer(int width, int height, DHImageTextureOptions textuerOptions, boolean onlyGenerateTexture) {
         this.width = width;
         this.height = height;
+        this.textureOptions = textuerOptions;
         referenceCountDisabled = false;
         frameBufferReferenceCount = 0;
         missingFrameBuffer = onlyGenerateTexture;
@@ -73,11 +76,11 @@ public class DHImageFrameBuffer {
         GLES20.glGenTextures(1, textures, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
 
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, textureOptions.minFilter);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, textureOptions.maxFilter);
         // This is necessary for non-power-of-two textures
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, textureOptions.wrapS);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, textureOptions.wrapT);
         texture = textures[0];
     }
 
@@ -87,7 +90,7 @@ public class DHImageFrameBuffer {
         GLES20.glGenFramebuffers(1, frameBuffers, 0);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffers[0]);
         generateTexture();
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, 0);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, textureOptions.internalFormat, width, height, 0, textureOptions.format, textureOptions.type, null);
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, texture, 0);
 
         int status = GLES20.glCheckFramebufferStatus(frameBuffers[0]);
@@ -112,5 +115,13 @@ public class DHImageFrameBuffer {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public DHImageTextureOptions getTextureOptions() {
+        return textureOptions;
+    }
+
+    public boolean isMissingFrameBuffer() {
+        return missingFrameBuffer;
     }
 }
