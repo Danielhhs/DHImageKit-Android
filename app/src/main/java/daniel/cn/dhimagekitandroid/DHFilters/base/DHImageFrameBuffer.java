@@ -124,4 +124,8 @@ public class DHImageFrameBuffer {
     public boolean isMissingFrameBuffer() {
         return missingFrameBuffer;
     }
+
+    public int getTexture() {
+        return texture;
+    }
 }

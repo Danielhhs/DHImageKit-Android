@@ -6,6 +6,6 @@ package daniel.cn.dhimagekitandroid.DHFilters.base;
 
 public class DHImageContext {
     private GLProgram currentShaderProgram;
-
+    private DHImageFrameBufferCache frameBufferCache;
 
 }

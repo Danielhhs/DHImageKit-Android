@@ -12,12 +12,6 @@ public class DHImageFrameBufferCache {
     private HashMap<String, Integer> frameBufferTypeCount;
     private ArrayList<DHImageFrameBuffer> activeFrameBufferList;
 
-    public DHImageFrameBufferCache() {
-        frameBufferCache = new HashMap<>();
-        frameBufferTypeCount = new HashMap<>();
-        activeFrameBufferList = new ArrayList<>();
-    }
-
     public DHImageFrameBuffer fetchFrameBuffer(int width, int height, DHImageTextureOptions textureOptions, boolean onlyTexture) {
         DHImageFrameBuffer frameBufferFromCache = null;
         //TO-DO: Run on another thread
@@ -84,4 +78,21 @@ public class DHImageFrameBufferCache {
         }
         return sb.toString();
     }
+
+    //Singleton
+    private DHImageFrameBufferCache() {
+        frameBufferCache = new HashMap<>();
+        frameBufferTypeCount = new HashMap<>();
+        activeFrameBufferList = new ArrayList<>();
+    };
+
+    private static class DHImageFrameBufferCacheHolder {
+        private static final DHImageFrameBufferCache sharedInstance = new DHImageFrameBufferCache();
+    }
+
+    public static DHImageFrameBufferCache sharedCache() {
+        return DHImageFrameBufferCacheHolder.sharedInstance;
+    }
+
+
 }
