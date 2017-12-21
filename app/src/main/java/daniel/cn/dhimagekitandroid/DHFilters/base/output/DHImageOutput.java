@@ -19,12 +19,13 @@ public class DHImageOutput {
     protected DHImageFrameBuffer outputFrameBuffer;
     protected List<IDHImageInput> targets;
     protected List<Integer> targetTextureIndices;
-    private DHImageSize inputTextureSize;
+    protected boolean usingNextFrameForImageCapture;
+    protected DHImageSize inputTextureSize;
+    protected boolean overrideInputSize;
+    protected DHImageSize forcedMaximumSize;
+
     private DHImageSize cachedMaximumOutputSize;
-    private DHImageSize forcedMaximumSize;
-    private boolean overrideInputSize;
     private boolean allTargetsWantMonochromeData;
-    private boolean usingNextFrameForImageCapture;
 
     private boolean shouldSmoothlyScaleOutput;
     private boolean shouldIgnoreUpdatesToThisTarget;

@@ -1,7 +1,11 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.util.Log;
+
+import java.nio.IntBuffer;
 
 /**
  * Created by huanghongsen on 2017/12/7.
@@ -57,6 +61,19 @@ public class DHImageFrameBuffer {
         }
     }
 
+    public Bitmap newBitmapFromFrameBufferContents() {
+        //TO-DO: Run On Video Processing Queue
+        //Use Image Processing Context
+        activateFrameBuffer();
+        int data[] = new int[width * height];
+        int bt[] = new int[width * height];
+        IntBuffer buffer = IntBuffer.wrap(data);
+        buffer.position(0);
+        GLES20.glReadPixels(0,0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
+        Bitmap image = Bitmap.createBitmap(bt, width, height, Bitmap.Config.ARGB_8888);
+        return image;
+    }
+
     public void clearAllLocks() {
         frameBufferReferenceCount = 0;
     }
@@ -73,7 +90,7 @@ public class DHImageFrameBuffer {
     private void generateTexture() {
         int textures[] = new int[1];
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
-        GLES20.glGenTextures(1, textures, 0);
+        GLES20.glGenTextures(1, IntBuffer.wrap(textures));
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
 
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, textureOptions.minFilter);

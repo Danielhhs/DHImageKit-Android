@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
@@ -18,7 +20,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
 import daniel.cn.dhimagekitandroid.DHFilters.componentfilters.DHImageBrightnessFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
-public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener, View.OnClickListener{
 
     private GPUImageView gpuImageView;
     private ArrayList<String> filterNames;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         DHImageEditor.sharedEditor().initializeEditor(loadImage(), gpuImageView, null);
 
         ((SeekBar)findViewById(R.id.seekBar)).setOnSeekBarChangeListener(this);
+
+        Button button = (Button)findViewById(R.id.button);
+        button.setOnClickListener(this);
 
     }
 
@@ -79,5 +84,10 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         DHImageEditor.sharedEditor().startProcessing(component);
         SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
         seekBar.setProgress(50);
+    }
+
+    @Override
+    public void onClick(View view) {
+        startActivity(new Intent(this, DHImageActivity.class));
     }
 }

@@ -80,7 +80,7 @@ public class DHImageFrameBufferCache {
     }
 
     //Singleton
-    private DHImageFrameBufferCache() {
+    public DHImageFrameBufferCache() {
         frameBufferCache = new HashMap<>();
         frameBufferTypeCount = new HashMap<>();
         activeFrameBufferList = new ArrayList<>();

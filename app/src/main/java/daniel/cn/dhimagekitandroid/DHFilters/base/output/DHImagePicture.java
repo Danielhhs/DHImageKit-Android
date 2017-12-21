@@ -108,7 +108,7 @@ public class DHImagePicture extends DHImageOutput {
         //TO-DO: Adjust image for GPU capacity
 
         //TO-DO: Run on video processing queue
-        outputFrameBuffer = DHImageFrameBufferCache.sharedCache().fetchFrameBuffer(pixelSizeOfImage.width, pixelSizeForTexture.height, true);
+        outputFrameBuffer = DHImageFrameBufferCache.sharedCache().fetchFrameBuffer((int)pixelSizeOfImage.width, (int)pixelSizeForTexture.height, true);
         outputFrameBuffer.disableReferenceCounting();
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, outputFrameBuffer.getTexture());

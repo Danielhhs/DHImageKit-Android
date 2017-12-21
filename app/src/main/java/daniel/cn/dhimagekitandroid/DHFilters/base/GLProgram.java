@@ -109,4 +109,20 @@ public class GLProgram {
     public void onDestroy() {
 
     }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    public String getVertexShaderLog() {
+        return vertexShaderLog;
+    }
+
+    public String getFragmentShaderLog() {
+        return fragmentShaderLog;
+    }
+
+    public String getProgramLog() {
+        return programLog;
+    }
 }
