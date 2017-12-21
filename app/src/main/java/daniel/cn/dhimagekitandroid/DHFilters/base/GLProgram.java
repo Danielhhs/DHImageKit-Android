@@ -53,7 +53,7 @@ public class GLProgram {
     }
 
     public int getUniformIndex(String uniform) {
-        return uniforms.indexOf(uniform);
+        return GLES20.glGetUniformLocation(program, uniform);
     }
 
     public boolean link() {

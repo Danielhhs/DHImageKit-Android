@@ -95,7 +95,7 @@ public class DHImageViewRenderer implements GLSurfaceView.Renderer {
     private int displayPositionAttribute, displayTexCoordsAttribute;
     private int displayTextureUniform;
     private DHImageSize inputImageSize;
-    private float imageVertices[];
+    private float imageVertices[] = new float[8];
     private float backgroundColorRed, backgroudColorGreen, backgroundColorBlue, backgroundColorAlpha;
     private DHImageSize boundsSizeAtFrameBufferEpoch;
     private int aspectRatio;
@@ -112,12 +112,12 @@ public class DHImageViewRenderer implements GLSurfaceView.Renderer {
     }
 
     private void commonInit() {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
+//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+//            @Override
+//            public void run() {
                 //TO-DO: Use shared program instead;
                 displayProgram = new GLProgram(DHImageFilter.DH_VERTEX_SHADER_STRING, DHImageFilter.DH_PASS_THROUGH_FRAGMENT_SHADER);
-                if (displayProgram != null && displayProgram.isInitialized()) {
+                if (displayProgram != null && !displayProgram.isInitialized()) {
                     displayProgram.addAttribute("position");
                     displayProgram.addAttribute("inputTextureCoordinate");
 
@@ -139,14 +139,14 @@ public class DHImageViewRenderer implements GLSurfaceView.Renderer {
 
                 setBackgroundColor(0.f, 0.f, 0.f, 1.f);
                 fillMode = DHImageViewFillMode.PreserveAspectRatio;
-            }
-        });
+//            }
+//        });
     }
 
     private void recalculateViewGeometry(final int width, final int height) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
+//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+//            @Override
+//            public void run() {
                 float widthScaling = 1.f, heightScaling = 1.f;
                 float scaledWidth, scaledHeight;
                 if (inputImageSize.width > inputImageSize.height) {
@@ -178,8 +178,8 @@ public class DHImageViewRenderer implements GLSurfaceView.Renderer {
                 imageVertices[5] = heightScaling;
                 imageVertices[6] = widthScaling;
                 imageVertices[7] = heightScaling;
-            }
-        });
+//            }
+//        });
     }
 
     private float[] textureCoordinateForRotation(DHImageRotationMode rotationMode) {
@@ -204,6 +204,7 @@ public class DHImageViewRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl10, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
+        recalculateViewGeometry(width, height);
     }
 
     @Override
