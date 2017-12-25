@@ -26,8 +26,6 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
     private TextureView mTextureView;
     private DHImageViewRenderer renderer;
     private IDHImageSurfaceListener surfaceListener;
-    private EGLSurface mSurface;
-    private EGLSurface sourceSurface;
     private DHImageContext mContext;
 
     private TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
@@ -38,18 +36,13 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
             }
             mContext = new DHImageContext();
             mContext.useAsCurrentContext();
-            mSurface = mContext.createWindowSurface(surface);
 
-            DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
-            renderer.initialize(width, height);
+            renderer.initialize(width, height, surface);
             surfaceListener.onSurfaceTextureAvailable();
         }
 
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-//            DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
-//            renderer.render();
-//            DHImageContext.getCurrentContext().displayCurrentSurface();
         }
 
         @Override
@@ -59,9 +52,6 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
 
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-//            DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
-//            renderer.render();
-//            DHImageContext.getCurrentContext().displayCurrentSurface();
         }
     };
 
@@ -88,14 +78,12 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
     //IDHImageInput
     @Override
     public void newFrameReady(float time, int index) {
-        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, sourceSurface);
         renderer.render();
         DHImageContext.getCurrentContext().displayCurrentSurface();
     }
 
     @Override
     public void setInputSurfaceTexture(EGLSurface surface, DHImageSurfaceTexture surfaceTexture, int index) {
-        this.sourceSurface =  surface;
         renderer.setSurfaceTexture(surface, surfaceTexture);
     }
 

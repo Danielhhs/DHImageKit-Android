@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.output;
 
+import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
@@ -96,6 +97,7 @@ public class DHImageViewRenderer {
     private DHImageViewFillMode fillMode;
     private DHImageSize sizeInPixels;
     private boolean enabled;
+    private boolean initialized;
 
     protected DHImageRotationMode inputRotation = DHImageRotationMode.NoRotation;
 
@@ -124,37 +126,39 @@ public class DHImageViewRenderer {
         backgroundColorAlpha = alpha;
     }
 
-    public void initialize(int width, int height) {
-//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-//            @Override
-//            public void run() {
-                //TO-DO: Use shared program instead;
+    public DHImageViewRenderer() {
+        initialized = false;
+    }
+
+    public void initialize(int width, int height, SurfaceTexture surface) {
+        mSurface = DHImageContext.getCurrentContext().createWindowSurface(surface);
+        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
+
         sizeInPixels = new DHImageSize(width, height);
-                displayProgram = new GLProgram(DHImageFilter.DH_VERTEX_SHADER_STRING, DHImageFilter.DH_PASS_THROUGH_FRAGMENT_SHADER);
-                if (displayProgram != null && !displayProgram.isInitialized()) {
-                    displayProgram.addAttribute("position");
-                    displayProgram.addAttribute("inputTextureCoordinate");
+        displayProgram = new GLProgram(DHImageFilter.DH_VERTEX_SHADER_STRING, DHImageFilter.DH_PASS_THROUGH_FRAGMENT_SHADER);
+        if (displayProgram != null && !displayProgram.isInitialized()) {
+            displayProgram.addAttribute("position");
+            displayProgram.addAttribute("inputTextureCoordinate");
 
-                    if (displayProgram.link() != true) {
-                        Log.e(LOG_TAG, "Program Log : " + displayProgram.getProgramLog());
-                        Log.e(LOG_TAG, "Vertext Shader Log : " + displayProgram.getVertexShaderLog());
-                        Log.e(LOG_TAG, "Fragment Shader Log : " + displayProgram.getFragmentShaderLog());
-                        return;
-                    }
-                }
+            if (displayProgram.link() != true) {
+                Log.e(LOG_TAG, "Program Log : " + displayProgram.getProgramLog());
+                Log.e(LOG_TAG, "Vertext Shader Log : " + displayProgram.getVertexShaderLog());
+                Log.e(LOG_TAG, "Fragment Shader Log : " + displayProgram.getFragmentShaderLog());
+                return;
+            }
+        }
 
-                displayPositionAttribute = displayProgram.getAttributeIndex("position");
-                displayTexCoordsAttribute = displayProgram.getAttributeIndex("inputTextureCoordinate");
-                displayTextureUniform = displayProgram.getUniformIndex("inputImageTexture");
+        displayPositionAttribute = displayProgram.getAttributeIndex("position");
+        displayTexCoordsAttribute = displayProgram.getAttributeIndex("inputTextureCoordinate");
+        displayTextureUniform = displayProgram.getUniformIndex("inputImageTexture");
 
-                DHImageContext.setActiveProgram(displayProgram);
-                GLES20.glEnableVertexAttribArray(displayPositionAttribute);
-                GLES20.glEnableVertexAttribArray(displayTexCoordsAttribute);
+        DHImageContext.setActiveProgram(displayProgram);
+        GLES20.glEnableVertexAttribArray(displayPositionAttribute);
+        GLES20.glEnableVertexAttribArray(displayTexCoordsAttribute);
 
-                setBackgroundColor(0.f, 0.f, 0.f, 1.f);
-                fillMode = DHImageViewFillMode.PreserveAspectRatio;
-//            }
-//        });
+        setBackgroundColor(0.f, 0.f, 0.f, 1.f);
+        fillMode = DHImageViewFillMode.PreserveAspectRatio;
+        initialized = true;
     }
 
     private void recalculateViewGeometry(final int width, final int height) {
@@ -211,6 +215,12 @@ public class DHImageViewRenderer {
     }
 
     public void render() {
+        if (initialized == false) {
+            Log.e("DHImageViewRenderer", "Render before renderer is initialized");
+            throw new RuntimeException("\"Render before renderer is initialized\"");
+        }
+        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, sourceSurface);
+
         DHImageContext.setActiveProgram(displayProgram);
 
         GLES20.glViewport(0, 0, (int)sizeInPixels.width, (int)sizeInPixels.height);
