@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.List;
 
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
+import javax.microedition.khronos.egl.EGLSurface;
+
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageTextureOptions;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
@@ -16,7 +18,8 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
  */
 
 public class DHImageOutput {
-    protected DHImageFrameBuffer outputFrameBuffer;
+    protected EGLSurface mSurface;
+    protected DHImageSurfaceTexture mOutputSurfaceTexture;
     protected List<IDHImageInput> targets;
     protected List<Integer> targetTextureIndices;
     protected boolean usingNextFrameForImageCapture;
@@ -40,26 +43,25 @@ public class DHImageOutput {
         usingNextFrameForImageCapture = false;
         allTargetsWantMonochromeData = true;
         outputTextureOptions = new DHImageTextureOptions();
-
     }
 
-    public void setInputFrameBufferForTarget(IDHImageInput target, int inputTextureIndex) {
-        target.setInputFrameBuffer(frameBufferForOutput(), inputTextureIndex);
+    public void setInputSurfaceTextureForTarget(IDHImageInput target, int inputTextureIndex) {
+        target.setInputSurfaceTexture(mSurface, surfaceTextureForOutput(), inputTextureIndex);
     }
 
-    public DHImageFrameBuffer frameBufferForOutput() {
-        return outputFrameBuffer;
+    public DHImageSurfaceTexture surfaceTextureForOutput() {
+        return mOutputSurfaceTexture;
     }
 
     public void removeOutputFrameBuffer() {
-        outputFrameBuffer = null;
+        mOutputSurfaceTexture = null;
     }
 
     public void notifyTargetsAboutNewOutputTexture() {
         for (IDHImageInput target : targets) {
             Integer index = targets.indexOf(target);
             int textureIndex = targetTextureIndices.indexOf(index);
-            setInputFrameBufferForTarget(target, textureIndex);
+            setInputSurfaceTextureForTarget(target, textureIndex);
         }
     }
 
@@ -83,7 +85,7 @@ public class DHImageOutput {
         }
         cachedMaximumOutputSize = DHImageSize.zeroSize();
         //TO-DO: Run on Video Processing Queue
-        setInputFrameBufferForTarget(target, location);
+        setInputSurfaceTextureForTarget(target, location);
         targets.add(target);
         targetTextureIndices.add(new Integer(location));
 
@@ -207,5 +209,9 @@ public class DHImageOutput {
 
     public void setOutputTextureOptions(DHImageTextureOptions outputTextureOptions) {
         this.outputTextureOptions = outputTextureOptions;
+    }
+
+    public EGLSurface getSurface() {
+        return mSurface;
     }
 }

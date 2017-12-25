@@ -3,16 +3,16 @@ package daniel.cn.dhimagekitandroid.DHFilters.base.output;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
-import android.view.TextureView;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
 import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageViewFillMode;
@@ -24,9 +24,18 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
  * Created by huanghongsen on 2017/12/20.
  */
 
-public class DHImageViewRenderer implements GLSurfaceView.Renderer {
+public class DHImageViewRenderer {
 
     public static final String LOG_TAG = "DHImageViewRenderer";
+
+    public static final String DH_RED_FRAGMENT_SHADER = "varying highp vec2 textureCoordinate;\n" +
+            " \n" +
+            " uniform sampler2D inputImageTexture;\n" +
+            " \n" +
+            " void main()\n" +
+            " {\n" +
+            "     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n" +
+            " }";
 
     static float noRotationTextureCoordinates[] = {
             0.0f, 1.0f,
@@ -88,17 +97,24 @@ public class DHImageViewRenderer implements GLSurfaceView.Renderer {
     private DHImageSize sizeInPixels;
     private boolean enabled;
 
-    protected DHImageRotationMode inputRotation;
+    protected DHImageRotationMode inputRotation = DHImageRotationMode.NoRotation;
 
-    private DHImageFrameBuffer inputFrameBufferForDisplay;
+    private EGLSurface mSurface, sourceSurface;
+    private DHImageSurfaceTexture mSurfaceTexture;
     private GLProgram displayProgram;
     private int displayPositionAttribute, displayTexCoordsAttribute;
     private int displayTextureUniform;
     private DHImageSize inputImageSize;
-    private float imageVertices[] = new float[8];
     private float backgroundColorRed, backgroudColorGreen, backgroundColorBlue, backgroundColorAlpha;
     private DHImageSize boundsSizeAtFrameBufferEpoch;
     private int aspectRatio;
+
+    private float imageVertices[] = {
+            -1.0f, -1.0f,
+            1.0f, -1.0f,
+            -1.0f, 1.0f,
+            1.0f, 1.0f,
+    };
 
 
     public void setBackgroundColor(float red, float green, float blue, float alpha) {
@@ -108,14 +124,12 @@ public class DHImageViewRenderer implements GLSurfaceView.Renderer {
         backgroundColorAlpha = alpha;
     }
 
-    public DHImageViewRenderer() {
-    }
-
-    private void commonInit() {
+    public void initialize(int width, int height) {
 //        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
 //            @Override
 //            public void run() {
                 //TO-DO: Use shared program instead;
+        sizeInPixels = new DHImageSize(width, height);
                 displayProgram = new GLProgram(DHImageFilter.DH_VERTEX_SHADER_STRING, DHImageFilter.DH_PASS_THROUGH_FRAGMENT_SHADER);
                 if (displayProgram != null && !displayProgram.isInitialized()) {
                     displayProgram.addAttribute("position");
@@ -196,43 +210,47 @@ public class DHImageViewRenderer implements GLSurfaceView.Renderer {
         return noRotationTextureCoordinates;
     }
 
-    @Override
-    public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        commonInit();
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 gl10, int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
-        recalculateViewGeometry(width, height);
-    }
-
-    @Override
-    public void onDrawFrame(GL10 gl10) {
+    public void render() {
         DHImageContext.setActiveProgram(displayProgram);
+
+        GLES20.glViewport(0, 0, (int)sizeInPixels.width, (int)sizeInPixels.height);
+
         GLES20.glClearColor(backgroundColorRed, backgroudColorGreen, backgroundColorBlue, backgroundColorAlpha);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE4);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, inputFrameBufferForDisplay.getTexture());
-        GLES20.glUniform1i(displayTextureUniform, 4);
+        FloatBuffer vertexBuffer = ByteBuffer.allocateDirect(imageVertices.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        vertexBuffer.put(imageVertices).position(0);
 
-        GLES20.glVertexAttribPointer(displayPositionAttribute, 2, GLES20.GL_FLOAT, false, 0, FloatBuffer.wrap(imageVertices));
-        GLES20.glVertexAttribPointer(displayTexCoordsAttribute, 2, GLES20.GL_FLOAT, false, 0, FloatBuffer.wrap(textureCoordinateForRotation(inputRotation)));
+        float texCoords[] = textureCoordinateForRotation(inputRotation);
+        FloatBuffer texCoordsBuffer = ByteBuffer.allocateDirect(noRotationTextureCoordinates.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        texCoordsBuffer.put(texCoords).position(0);
+
+        GLES20.glEnableVertexAttribArray(displayPositionAttribute);
+        GLES20.glVertexAttribPointer(displayPositionAttribute, 2, GLES20.GL_FLOAT, false, 0, vertexBuffer);
+
+        GLES20.glEnableVertexAttribArray(displayTexCoordsAttribute);
+        GLES20.glVertexAttribPointer(displayTexCoordsAttribute, 2, GLES20.GL_FLOAT, false, 0, texCoordsBuffer);
+
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mSurfaceTexture.getTexture());
+        GLES20.glUniform1i(displayTextureUniform, 0);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
-        inputFrameBufferForDisplay.unlock();;
-        inputFrameBufferForDisplay = null;
-
     }
 
-    public DHImageFrameBuffer getInputFrameBufferForDisplay() {
-        return inputFrameBufferForDisplay;
+    public DHImageSurfaceTexture getSurfaceTexture() {
+        return mSurfaceTexture;
     }
 
-    public void setInputFrameBufferForDisplay(DHImageFrameBuffer inputFrameBufferForDisplay) {
-        this.inputFrameBufferForDisplay = inputFrameBufferForDisplay;
+    public void setSurfaceTexture(EGLSurface sourceSurface, DHImageSurfaceTexture surfaceTexture) {
+        this.mSurfaceTexture = surfaceTexture;
+        this.sourceSurface = sourceSurface;
     }
 
     public DHImageRotationMode getInputRotation() {

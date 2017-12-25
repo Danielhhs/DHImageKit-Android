@@ -2,19 +2,19 @@ package daniel.cn.dhimagekitandroid.DHFilters.base.output;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.opengl.EGLContext;
+import android.graphics.SurfaceTexture;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.TextureView;
 import android.widget.FrameLayout;
 
+import javax.microedition.khronos.egl.EGLSurface;
+
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
-import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
-import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageViewFillMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
+import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 /**
@@ -23,8 +23,47 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 public class DHImageView extends FrameLayout implements IDHImageInput {
 
-    private GLSurfaceView mGLServiceView;
+    private TextureView mTextureView;
     private DHImageViewRenderer renderer;
+    private IDHImageSurfaceListener surfaceListener;
+    private EGLSurface mSurface;
+    private EGLSurface sourceSurface;
+    private DHImageContext mContext;
+
+    private TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
+        @Override
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            if (surfaceListener == null) {
+                throw new RuntimeException("Did Not Set Surface Listener For DHImageView");
+            }
+            mContext = new DHImageContext();
+            mContext.useAsCurrentContext();
+            mSurface = mContext.createWindowSurface(surface);
+
+            DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
+            renderer.initialize(width, height);
+            surfaceListener.onSurfaceTextureAvailable();
+        }
+
+        @Override
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+//            DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
+//            renderer.render();
+//            DHImageContext.getCurrentContext().displayCurrentSurface();
+        }
+
+        @Override
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            return false;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+//            DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
+//            renderer.render();
+//            DHImageContext.getCurrentContext().displayCurrentSurface();
+        }
+    };
 
     public DHImageView(Context context) {
         super(context);
@@ -38,33 +77,26 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
 
     private void init(Context context, AttributeSet attrs) {
 
-        mGLServiceView = new GLSurfaceView(context, attrs);
+        mTextureView = new TextureView(context, attrs);
 
-        mGLServiceView.setEGLContextClientVersion(2);
-        mGLServiceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        mGLServiceView.getHolder().setFormat(PixelFormat.RGBA_8888);
+        addView(mTextureView);
+        mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+
         renderer = new DHImageViewRenderer();
-        mGLServiceView.setRenderer(renderer);
-        mGLServiceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-
-        addView(mGLServiceView);
     }
 
     //IDHImageInput
     @Override
     public void newFrameReady(float time, int index) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
-                mGLServiceView.requestRender();
-            }
-        });
+        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, sourceSurface);
+        renderer.render();
+        DHImageContext.getCurrentContext().displayCurrentSurface();
     }
 
     @Override
-    public void setInputFrameBuffer(DHImageFrameBuffer frameBuffer, int index) {
-        renderer.setInputFrameBufferForDisplay(frameBuffer);
-        frameBuffer.unlock();
+    public void setInputSurfaceTexture(EGLSurface surface, DHImageSurfaceTexture surfaceTexture, int index) {
+        this.sourceSurface =  surface;
+        renderer.setSurfaceTexture(surface, surfaceTexture);
     }
 
     @Override
@@ -84,7 +116,7 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
 
     @Override
     public DHImageSize maximumOutputSize() {
-        return new DHImageSize(mGLServiceView.getWidth(), mGLServiceView.getHeight());
+        return new DHImageSize(mTextureView.getWidth(), mTextureView.getHeight());
     }
 
     @Override
@@ -118,4 +150,11 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
         return renderer;
     }
 
+    public IDHImageSurfaceListener getSurfaceListener() {
+        return surfaceListener;
+    }
+
+    public void setSurfaceListener(IDHImageSurfaceListener surfaceListener) {
+        this.surfaceListener = surfaceListener;
+    }
 }

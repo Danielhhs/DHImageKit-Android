@@ -2,13 +2,15 @@ package daniel.cn.dhimagekitandroid.DHFilters.base.output;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import java.io.File;
+import java.nio.IntBuffer;
 
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBufferCache;
+import javax.microedition.khronos.opengles.GL10;
+
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImagePictureCallback;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
@@ -54,7 +56,7 @@ public class DHImagePicture extends DHImageOutput {
 
             target.setCurrentlyReceivingMonochromeInput(false);
             target.setInputSize(pixelSizeOfImage, textureIndexOfTarget);
-            target.setInputFrameBuffer(outputFrameBuffer, textureIndexOfTarget);
+            target.setInputSurfaceTexture(mSurface, mOutputSurfaceTexture, textureIndexOfTarget);
             target.newFrameReady(0, textureIndexOfTarget);
         }
         if (callback != null) {
@@ -87,8 +89,7 @@ public class DHImagePicture extends DHImageOutput {
     @Override
     public void destroy() {
         super.destroy();
-        outputFrameBuffer.unlock();
-        outputFrameBuffer.enableReferenceCounting();
+        mOutputSurfaceTexture = null;
     }
 
     @Override
@@ -105,13 +106,12 @@ public class DHImagePicture extends DHImageOutput {
         pixelSizeOfImage = new DHImageSize(bitmap.getWidth(), bitmap.getHeight());
         DHImageSize pixelSizeForTexture = new DHImageSize(pixelSizeOfImage.width, pixelSizeOfImage.height);
 
-        //TO-DO: Adjust image for GPU capacity
+        mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int)pixelSizeForTexture.width, (int)pixelSizeForTexture.height);
+        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
 
-        //TO-DO: Run on video processing queue
-        outputFrameBuffer = DHImageFrameBufferCache.sharedCache().fetchFrameBuffer((int)pixelSizeOfImage.width, (int)pixelSizeForTexture.height, true);
-        outputFrameBuffer.disableReferenceCounting();
+        mOutputSurfaceTexture = DHImageContext.getCurrentContext().createSurfaceTexture(getOutputTextureOptions(), mSurface);
 
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, outputFrameBuffer.getTexture());
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mOutputSurfaceTexture.getTexture());
         if (shouldSmoothlyScaleOutput) {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_LINEAR);
         }
@@ -122,5 +122,14 @@ public class DHImagePicture extends DHImageOutput {
             GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
         }
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+    }
+
+    public Bitmap convertToBitMap() {
+        IntBuffer ib = IntBuffer.allocate((int)pixelSizeOfImage.width * (int)pixelSizeOfImage.height);
+        GLES20.glReadPixels(0, 0, (int)pixelSizeOfImage.width , (int)pixelSizeOfImage.height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
+        int ia[] = ib.array();
+        Bitmap bitmap = Bitmap.createBitmap((int)pixelSizeOfImage.width , (int)pixelSizeOfImage.height, Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(IntBuffer.wrap(ia));
+        return bitmap;
     }
 }

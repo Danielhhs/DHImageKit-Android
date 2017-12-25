@@ -22,6 +22,7 @@ public class DHImageSize {
     }
 
     public boolean equals(DHImageSize size) {
+        if (size == null) return false;
         return size.width == width && size.height == height;
     }
 }

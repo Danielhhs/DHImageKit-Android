@@ -1,7 +1,9 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.interfaces;
 
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
+import javax.microedition.khronos.egl.EGLSurface;
+
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
+import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageSurfaceTexture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 /**
@@ -10,7 +12,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 public interface IDHImageInput {
     public void newFrameReady(float time, int index);
-    public void setInputFrameBuffer(DHImageFrameBuffer frameBuffer, int index);
+    public void setInputSurfaceTexture(EGLSurface inputSurface, DHImageSurfaceTexture surfaceTexture, int index);
     public int nextAvailableTextureIndex();
     public void setInputSize(DHImageSize size, int index);
     public void setInputRotation(DHImageRotationMode rotationMode, int index);
