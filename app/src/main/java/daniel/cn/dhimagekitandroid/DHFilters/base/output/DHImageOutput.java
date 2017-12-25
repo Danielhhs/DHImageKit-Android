@@ -1,11 +1,14 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.output;
 
 import android.graphics.Bitmap;
+import android.opengl.GLES20;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLSurface;
+import javax.microedition.khronos.opengles.GL10;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageTextureOptions;
@@ -19,6 +22,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 public class DHImageOutput {
     protected EGLSurface mSurface;
+    protected DHImageFrameBuffer frameBuffer;
     protected DHImageSurfaceTexture mOutputSurfaceTexture;
     protected List<IDHImageInput> targets;
     protected List<Integer> targetTextureIndices;

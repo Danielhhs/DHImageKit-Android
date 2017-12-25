@@ -103,6 +103,12 @@ public class DHImageContext {
         return surfaceTexture;
     }
 
+    public DHImageSurfaceTexture createSurfaceTexture(int texture, EGLSurface surface) {
+        makeSurfaceCurrent(surface);
+        DHImageSurfaceTexture surfaceTexture = new DHImageSurfaceTexture(texture);
+        return surfaceTexture;
+    }
+
     public void displayCurrentSurface() {
         mEGL.eglSwapBuffers(mEGLDisplay, mCurrentEGLSurface);
     }

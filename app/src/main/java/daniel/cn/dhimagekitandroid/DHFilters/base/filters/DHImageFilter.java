@@ -7,16 +7,19 @@ import android.util.Log;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.egl.EGLSurface;
+import javax.microedition.khronos.opengles.GL10;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
+import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageFrameBuffer;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageOutput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageSurfaceTexture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
@@ -117,6 +120,7 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
 
     private Semaphore semaphore;
 
+    protected EGLSurface mSourceSurface;
     protected DHImageSurfaceTexture firstInputSurfaceTexture;
     protected GLProgram filterProgram;
     protected int filterPositionAttribute;
@@ -151,7 +155,7 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
         //TO-DO: Run on video processing Queue
         //TO-DO: Add program cache
         filterProgram = new GLProgram(vertexShaderString, fragmentShaderString);
-        if (filterProgram != null && filterProgram.isInitialized()) {
+        if (filterProgram != null && !filterProgram.isInitialized()) {
             initializeAttributes();
             boolean linked = filterProgram.link();
             if (linked == false) {
@@ -167,6 +171,7 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
 
         GLES20.glEnableVertexAttribArray(filterPositionAttribute);
         GLES20.glEnableVertexAttribArray(filterTexCoordAttribute);
+
     }
 
     public void initializeAttributes() {
@@ -175,7 +180,9 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
     }
 
     public void setupFilterForSize(DHImageSize size) {
-
+        mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int)size.width, (int)size.height);
+        frameBuffer = new DHImageFrameBuffer(size);
+        mOutputSurfaceTexture = DHImageContext.getCurrentContext().createSurfaceTexture(frameBuffer.getTexture(), mSurface);
     }
 
     public DHImageSize rotatedSize(DHImageSize sizeToRotate, int textureIndex) {
@@ -234,21 +241,21 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
     }
 
     public void renderToTexture(float[] vertices, float[]texCoords) {
+        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, mSourceSurface);
         if (preventRendering) {
             return;
         }
+
+        frameBuffer.activate();
+
         DHImageContext.setActiveProgram(filterProgram);
-//        outputFrameBuffer = DHImageContext.shahredFrameBufferCache().fetchFrameBuffer((int)sizeOfFBO().width, (int)sizeOfFBO().height, getOutputTextureOptions(), false);
-//        outputFrameBuffer.activateFrameBuffer();
-        if (usingNextFrameForImageCapture) {
-//            outputFrameBuffer.lock();
-        }
+
         setUniformsForProgram(0);
         GLES20.glClearColor(backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
-//        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, firstInputFrameBuffer.getTexture());
 
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, firstInputSurfaceTexture.getTexture());
         GLES20.glUniform1i(filterInputTextureUniform, 2);
 
         FloatBuffer vertexBuffer = ByteBuffer.allocateDirect(vertices.length * 4)
@@ -265,6 +272,9 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
         GLES20.glVertexAttribPointer(filterTexCoordAttribute, 2, GLES20.GL_FLOAT, false, 0, texCoordsBuffer);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
+        frameBuffer.deactivate();
+        convertToBitMap();
 //        firstInputFrameBuffer.unlock();
         if (usingNextFrameForImageCapture) {
             semaphore.release();
@@ -277,8 +287,9 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
             if (!target.equals(getTargetToIgnoreForUpdates())) {
                 int indexOfObject = targets.indexOf(target);
                 int textureIndex = targetTextureIndices.get(indexOfObject);
-//                setInputFrameBufferForTarget(target, textureIndex);
+                target.setInputSurfaceTexture(mSurface, surfaceTextureForOutput(), textureIndex);
                 target.setInputSize(outputFrameSize(), textureIndex);
+                target.newFrameReady(time, textureIndex);
             }
         }
     }
@@ -507,7 +518,8 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
 
     @Override
     public void setInputSurfaceTexture(EGLSurface surface, DHImageSurfaceTexture surfaceTexture, int index) {
-
+        mSourceSurface = surface;
+        firstInputSurfaceTexture = surfaceTexture;
     }
 
 //    @Override
@@ -579,5 +591,18 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
     @Override
     public void setCurrentlyReceivingMonochromeInput(boolean newValue) {
 
+    }
+
+
+
+    public Bitmap convertToBitMap() {
+//        GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
+//        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mOutputSurfaceTexture.getTexture());
+        IntBuffer ib = IntBuffer.allocate((int)inputTextureSize.width * (int)inputTextureSize.height);
+        GLES20.glReadPixels(0, 0, (int)inputTextureSize.width , (int)inputTextureSize.height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
+        int ia[] = ib.array();
+        Bitmap bitmap = Bitmap.createBitmap((int)inputTextureSize.width , (int)inputTextureSize.height, Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(IntBuffer.wrap(ia));
+        return bitmap;
     }
 }

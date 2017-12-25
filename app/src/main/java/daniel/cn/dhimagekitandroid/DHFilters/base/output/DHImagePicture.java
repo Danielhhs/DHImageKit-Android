@@ -124,12 +124,5 @@ public class DHImagePicture extends DHImageOutput {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
-    public Bitmap convertToBitMap() {
-        IntBuffer ib = IntBuffer.allocate((int)pixelSizeOfImage.width * (int)pixelSizeOfImage.height);
-        GLES20.glReadPixels(0, 0, (int)pixelSizeOfImage.width , (int)pixelSizeOfImage.height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
-        int ia[] = ib.array();
-        Bitmap bitmap = Bitmap.createBitmap((int)pixelSizeOfImage.width , (int)pixelSizeOfImage.height, Bitmap.Config.ARGB_8888);
-        bitmap.copyPixelsFromBuffer(IntBuffer.wrap(ia));
-        return bitmap;
-    }
+
 }

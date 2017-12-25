@@ -47,7 +47,10 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
     public void onSurfaceTextureAvailable() {
         DHImageView imageView = (DHImageView)findViewById(R.id.dhImageView);
         picture = new DHImagePicture(loadImage());
-        picture.addTarget(imageView);
+
+        DHImageFilter filter = new DHImageFilter();
+        picture.addTarget(filter);
+        filter.addTarget(imageView);
 
         picture.processImage();
     }
