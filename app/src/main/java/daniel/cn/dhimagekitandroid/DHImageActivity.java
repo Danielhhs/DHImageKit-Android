@@ -15,9 +15,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import java.nio.IntBuffer;
 
+import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilter;
@@ -26,10 +28,13 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageView;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageViewRenderer;
 
-public class DHImageActivity extends AppCompatActivity implements IDHImageSurfaceListener {
+public class DHImageActivity extends AppCompatActivity implements IDHImageSurfaceListener, SeekBar.OnSeekBarChangeListener {
 
     DHImagePicture picture;
     DHImageViewRenderer renderer;
+
+    DHImageBrightnessFilter filter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +42,9 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
 
         DHImageView imageView = (DHImageView)findViewById(R.id.dhImageView);
         imageView.setSurfaceListener(this);
+
+        SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar2);
+        seekBar.setOnSeekBarChangeListener(this);
     }
 
     private Bitmap loadImage() {
@@ -53,6 +61,7 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
         filter.setBrightness(0.3f);
         picture.addTarget(filter);
         filter.addTarget(imageView);
+        this.filter = filter;
 
         picture.processImage();
     }
@@ -66,5 +75,23 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
         int height = imageView.getHeight();
 
         Log.e("sdafsf", width + ", " + height);
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        float brightness = seekBar.getProgress() / 100.f;
+        Log.d("hhs", brightness + "");
+        filter.setBrightness(brightness);
+        picture.processImage();
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 }

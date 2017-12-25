@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="daniel.cn.dhimagekitandroid.DHImageActivity">
 
     <daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageView
@@ -12,10 +13,22 @@
         android:layout_height="395dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" >
+        tools:layout_editor_absoluteY="16dp">
 
 
     </daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageView>
-</android.support.design.widget.CoordinatorLayout>
+
+
+    <SeekBar
+        android:id="@+id/seekBar2"
+        android:layout_width="367dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="20pt"
+        android:layout_alignRight="@+id/dhImageView"
+        android:layout_alignEnd="@+id/dhImageView"
+        android:layout_alignLeft="@+id/dhImageView"
+        android:layout_alignStart="@+id/dhImageView" />
+</LinearLayout>
