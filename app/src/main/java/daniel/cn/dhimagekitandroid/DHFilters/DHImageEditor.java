@@ -6,7 +6,6 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.List;
 
-import daniel.cn.dhimagekitandroid.DHFilters.componentfilters.DHImageComponentFilterFactory;
 import daniel.cn.dhimagekitandroid.DHFilters.effectfilters.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.effectfilters.DHImageNormalFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
@@ -61,8 +60,6 @@ public class DHImageEditor {
         currentComponent = component;
         currentSubtype = subtype;
 
-        GPUImageFilter filter = DHImageComponentFilterFactory.filterForComponentAndSubtype(component, subtype);
-        addFilter(filter);
         renderTarget.requestRender();
     }
 

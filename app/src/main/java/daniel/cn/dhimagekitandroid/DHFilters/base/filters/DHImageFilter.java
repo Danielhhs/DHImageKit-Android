@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
+import daniel.cn.dhimagekitandroid.DHFilters.IDHImageUpdatable;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
@@ -33,7 +34,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHVector4;
  * Created by huanghongsen on 2017/12/8.
  */
 
-public class DHImageFilter extends DHImageOutput implements IDHImageInput {
+public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHImageUpdatable {
 
     public static final String DH_VERTEX_SHADER_STRING = " attribute vec4 position;\n" +
             " attribute vec4 inputTextureCoordinate;\n" +
@@ -125,7 +126,7 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
     protected GLProgram filterProgram;
     protected int filterPositionAttribute;
     protected int filterTexCoordAttribute;
-    protected int filterInputTextureUniform;
+    protected int filterInputTextureUniform, filterStrengthUniform;
     protected float backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha;
     protected boolean isEndProcessing;
     protected DHImageSize currentFilterSize;
@@ -168,6 +169,7 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
         filterPositionAttribute = filterProgram.getAttributeIndex("position");
         filterTexCoordAttribute = filterProgram.getAttributeIndex("inputTextureCoordinate");
         filterInputTextureUniform = filterProgram.getUniformIndex("inputImageTexture");
+        filterStrengthUniform = filterProgram.getUniformIndex("strength");
 
         GLES20.glEnableVertexAttribArray(filterPositionAttribute);
         GLES20.glEnableVertexAttribArray(filterTexCoordAttribute);
@@ -274,8 +276,6 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
         frameBuffer.deactivate();
-        convertToBitMap();
-//        firstInputFrameBuffer.unlock();
         if (usingNextFrameForImageCapture) {
             semaphore.release();
         }
@@ -327,13 +327,13 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
     }
 
     public void setFloatUniform(final float value, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
+//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+//            @Override
+//            public void run() {
                 DHImageContext.setActiveProgram(program);
                 GLES20.glUniform1f(uniformLocation, value);
-            }
-        });
+//            }
+//        });
     }
 
     public void setSizeUniform(DHImageSize size, String uniformName) {
@@ -594,15 +594,13 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput {
     }
 
 
+    @Override
+    public void updateWithStrength(float strength) {
+        setFloatUniform(strength, filterStrengthUniform, filterProgram);
+    }
 
-    public Bitmap convertToBitMap() {
-//        GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
-//        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mOutputSurfaceTexture.getTexture());
-        IntBuffer ib = IntBuffer.allocate((int)inputTextureSize.width * (int)inputTextureSize.height);
-        GLES20.glReadPixels(0, 0, (int)inputTextureSize.width , (int)inputTextureSize.height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
-        int ia[] = ib.array();
-        Bitmap bitmap = Bitmap.createBitmap((int)inputTextureSize.width , (int)inputTextureSize.height, Bitmap.Config.ARGB_8888);
-        bitmap.copyPixelsFromBuffer(IntBuffer.wrap(ia));
-        return bitmap;
+    @Override
+    public void updateWithInput(float input) {
+
     }
 }

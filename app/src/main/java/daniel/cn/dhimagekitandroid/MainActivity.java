@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditComponent;
 import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
-import daniel.cn.dhimagekitandroid.DHFilters.componentfilters.DHImageBrightnessFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
 public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener, View.OnClickListener{

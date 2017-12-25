@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import java.nio.IntBuffer;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
@@ -48,7 +49,8 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
         DHImageView imageView = (DHImageView)findViewById(R.id.dhImageView);
         picture = new DHImagePicture(loadImage());
 
-        DHImageFilter filter = new DHImageFilter();
+        DHImageBrightnessFilter filter = new DHImageBrightnessFilter();
+        filter.setBrightness(0.3f);
         picture.addTarget(filter);
         filter.addTarget(imageView);
 
