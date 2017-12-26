@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SeekBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
@@ -20,6 +21,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageBrightnessFilte
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageContrastFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilterFactory;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilterGroup;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
@@ -31,7 +33,7 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
     DHImageViewRenderer renderer;
     List<DHImageFilterType> filterTypes;
 
-    DHImageFilter lastFilter;
+    DHImageFilterGroup filterGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,10 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
     public void onSurfaceTextureAvailable() {
         DHImageView imageView = (DHImageView)findViewById(R.id.dhImageView);
         picture = new DHImagePicture(loadImage());
+        filterGroup = new DHImageFilterGroup();
+        picture.addTarget(filterGroup);
+
+        filterGroup.addTarget(imageView);
         picture.processImage();
     }
 
@@ -81,8 +87,8 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
         DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
             @Override
             public void run() {
-                if (lastFilter != null) {
-                    lastFilter.updateWithPercent(percent);
+                if (filterGroup != null) {
+                    filterGroup.getTerminalFilter().updateWithInput(percent);
                     picture.processImage();
                 }
             }
@@ -107,14 +113,17 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
             @Override
             public void run() {
                 DHImageFilter filter = DHImageFilterFactory.filterForType(filterType);
-                if (lastFilter == null) {
-                    picture.addTarget(filter);
+                if (filterGroup.filterCount() == 0) {
+                    List initialFilters = new ArrayList();
+                    initialFilters.add(filter);
+                    filterGroup.setInitialFilters(initialFilters);
                 } else {
-                    lastFilter.removeAllTargets();
-                    lastFilter.addTarget(filter);
+                    filterGroup.removeAllTargets();
+                    filterGroup.getTerminalFilter().addTarget(filter);
                 }
-                lastFilter = filter;
-                lastFilter.addTarget(imageView);
+                filterGroup.addFilter(filter);
+                filterGroup.setTerminalFilter(filter);
+                filterGroup.addTarget(imageView);
                 picture.processImage();
             }
         });

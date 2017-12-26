@@ -2,6 +2,7 @@ package daniel.cn.dhimagekitandroid.DHFilters;
 
 import android.opengl.GLES20;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageUpdatable;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 
 /**
@@ -39,35 +40,6 @@ public class DHImageBaseFilter extends GPUImageFilter implements IDHImageUpdatab
         setFloat(strengthUniform, strength);
     }
 
-    @Override
-    public void updateWithPercent(float percent) {
-
-    }
-
-    public float getMinValue() {
-        return minValue;
-    }
-
-    public void setMinValue(float minValue) {
-        this.minValue = minValue;
-    }
-
-    public float getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(float maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public float getInitialValue() {
-        return initialValue;
-    }
-
-    @Override
-    public float getCurrentValue() {
-        return 0;
-    }
 
     public void setInitialValue(float initialValue) {
         this.initialValue = initialValue;

@@ -6,6 +6,7 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.List;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageUpdatable;
 import daniel.cn.dhimagekitandroid.DHFilters.effectfilters.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.effectfilters.DHImageNormalFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
@@ -67,7 +68,6 @@ public class DHImageEditor {
     public void updateWithInput(float input) {
         if (currentFilter instanceof IDHImageUpdatable) {
             IDHImageUpdatable updatable = (IDHImageUpdatable)currentFilter;
-            updatable.updateWithInput(input);
         }
         renderTarget.requestRender();
     }

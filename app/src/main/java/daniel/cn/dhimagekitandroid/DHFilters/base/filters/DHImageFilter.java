@@ -12,13 +12,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.egl.EGLSurface;
 
-import daniel.cn.dhimagekitandroid.DHFilters.IDHImageUpdatable;
+import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageUpdatable;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
+import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageValues;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageOutput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageSurfaceTexture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
@@ -32,7 +32,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHVector4;
  * Created by huanghongsen on 2017/12/8.
  */
 
-public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHImageUpdatable {
+public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
 
     public static final String DH_VERTEX_SHADER_STRING = " attribute vec4 position;\n" +
             " attribute vec4 inputTextureCoordinate;\n" +
