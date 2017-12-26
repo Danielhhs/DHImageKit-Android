@@ -11,6 +11,7 @@ import java.nio.IntBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
+import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImagePictureCallback;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
@@ -50,15 +51,20 @@ public class DHImagePicture extends DHImageOutput {
         hasProcessedImage = true;
         //TO-DO: Use semaphore to ensure only one task will be executed at a time;
         //TO-DO: Run on video processing queue;
-        for (IDHImageInput target : targets) {
-            int indexOfTarget = targets.indexOf(target);
-            Integer textureIndexOfTarget = targetTextureIndices.get(indexOfTarget);
+        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+            @Override
+            public void run() {
+                for (IDHImageInput target : targets) {
+                    int indexOfTarget = targets.indexOf(target);
+                    Integer textureIndexOfTarget = targetTextureIndices.get(indexOfTarget);
 
-            target.setCurrentlyReceivingMonochromeInput(false);
-            target.setInputSize(pixelSizeOfImage, textureIndexOfTarget);
-            target.setInputSurfaceTexture(mSurface, mOutputSurfaceTexture, textureIndexOfTarget);
-            target.newFrameReady(0, textureIndexOfTarget);
-        }
+                    target.setCurrentlyReceivingMonochromeInput(false);
+                    target.setInputSize(pixelSizeOfImage, textureIndexOfTarget);
+                    target.setInputSurfaceTexture(mSurface, mOutputSurfaceTexture, textureIndexOfTarget);
+                    target.newFrameReady(0, textureIndexOfTarget);
+                }
+            }
+        });
         if (callback != null) {
             callback.onImageProcessFinished();
         }

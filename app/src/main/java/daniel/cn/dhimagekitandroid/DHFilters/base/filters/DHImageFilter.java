@@ -192,7 +192,9 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHIm
     }
 
     public void setupFilterForSize(DHImageSize size) {
-        mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int)size.width, (int)size.height);
+        if (mSurface == null) {
+            mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) size.width, (int) size.height);
+        }
         frameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(size, getOutputTextureOptions(), false);
         mOutputSurfaceTexture = DHImageContext.getCurrentContext().createSurfaceTexture(frameBuffer.getTexture(), mSurface);
     }

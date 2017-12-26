@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import javax.microedition.khronos.egl.EGLSurface;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
+import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
@@ -30,11 +31,19 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
             if (surfaceListener == null) {
                 throw new RuntimeException("Did Not Set Surface Listener For DHImageView");
             }
-            mContext = new DHImageContext();
-            mContext.useAsCurrentContext();
+            final int tmpWidth = width;
+            final int tmpHeight = height;
+            final SurfaceTexture tmpSurface = surface;
+            DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+                @Override
+                public void run() {
+                    mContext = new DHImageContext();
+                    mContext.useAsCurrentContext();
 
-            renderer.initialize(width, height, surface);
-            surfaceListener.onSurfaceTextureAvailable();
+                    renderer.initialize(tmpWidth, tmpHeight, tmpSurface);
+                    surfaceListener.onSurfaceTextureAvailable();
+                }
+            });
         }
 
         @Override

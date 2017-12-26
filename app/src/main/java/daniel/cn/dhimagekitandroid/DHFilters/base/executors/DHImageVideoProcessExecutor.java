@@ -1,5 +1,7 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.executors;
 
+import android.os.AsyncTask;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

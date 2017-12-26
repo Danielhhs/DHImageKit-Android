@@ -38,16 +38,16 @@ public class DHImageFrameBufferCache {
         Integer numberOfMatchingsInCache = frameBufferTypeCounts.get(hashKey);
 
         if (numberOfMatchingsInCache == null || numberOfMatchingsInCache < 1) {
-            Log.d(LOG_TAG, ">>>Failed to Fetching frameBuffer for key: " + hashKey);
+            Log.d(LOG_TAG, ">>>Failed to Fetch frameBuffer for key: " + hashKey);
             frameBuffer = new DHImageFrameBuffer(size, options, onlyTexture);
         } else {
             Log.d(LOG_TAG, ">>>Fetching frameBuffer for key: " + hashKey + ", number of matches: " + numberOfMatchingsInCache);
             Integer currentTextureId = numberOfMatchingsInCache - 1;
-            while (frameBuffer == null && currentTextureId > 0) {
+            while (frameBuffer == null && currentTextureId >= 0) {
                 String textureHash = hashKey + "-" + currentTextureId;
-                frameBuffer = frameBufferCache.get(hashKey);
+                frameBuffer = frameBufferCache.get(textureHash);
                 if (frameBuffer != null) {
-                    frameBufferCache.remove(hashKey);
+                    frameBufferCache.remove(textureHash);
                 }
                 currentTextureId--;
             }
@@ -55,6 +55,7 @@ public class DHImageFrameBufferCache {
             frameBufferTypeCounts.put(hashKey, currentTextureId);
             if (frameBuffer == null) {
                 frameBuffer = new DHImageFrameBuffer(size, options, onlyTexture);
+                Log.d(LOG_TAG, ">>>Failed to Fetch frame buffer for key: " + hashKey);
             }
         }
 

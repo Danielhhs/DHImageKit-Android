@@ -2,6 +2,8 @@ package daniel.cn.dhimagekitandroid.DHFilters.base;
 
 import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
+import android.os.Handler;
+import android.os.Looper;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;

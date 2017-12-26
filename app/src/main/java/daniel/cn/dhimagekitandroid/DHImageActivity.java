@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SeekBar;
 
 import java.util.List;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
+import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageContrastFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilter;
@@ -21,12 +25,13 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageViewRenderer;
 
-public class DHImageActivity extends AppCompatActivity implements IDHImageSurfaceListener, SeekBar.OnSeekBarChangeListener {
+public class DHImageActivity extends AppCompatActivity implements IDHImageSurfaceListener, SeekBar.OnSeekBarChangeListener, ListView.OnItemClickListener {
 
     DHImagePicture picture;
     DHImageViewRenderer renderer;
+    List<DHImageFilterType> filterTypes;
 
-    DHImageFilter filter;
+    DHImageFilter lastFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +45,10 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
         seekBar.setOnSeekBarChangeListener(this);
 
         ListView listView = (ListView)findViewById(R.id.listView);
-        List filters = DHImageFilterFactory.availableFilters();
-        FilterAdapter adapter = new FilterAdapter(this, filters);
+        filterTypes = DHImageFilterFactory.availableFilters();
+        FilterAdapter adapter = new FilterAdapter(this, filterTypes);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
 
     }
 
@@ -55,12 +61,6 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
     public void onSurfaceTextureAvailable() {
         DHImageView imageView = (DHImageView)findViewById(R.id.dhImageView);
         picture = new DHImagePicture(loadImage());
-
-        DHImageContrastFilter filter = new DHImageContrastFilter();
-        picture.addTarget(filter);
-        filter.addTarget(imageView);
-        this.filter = filter;
-
         picture.processImage();
     }
 
@@ -77,9 +77,16 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        float percent = seekBar.getProgress() / 100.f;
-        filter.updateWithPercent(percent);
-        picture.processImage();
+        final float percent = seekBar.getProgress() / 100.f;
+        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+            @Override
+            public void run() {
+                if (lastFilter != null) {
+                    lastFilter.updateWithPercent(percent);
+                    picture.processImage();
+                }
+            }
+        });
     }
 
     @Override
@@ -90,5 +97,26 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        final DHImageView imageView = (DHImageView)findViewById(R.id.dhImageView);
+        final DHImageFilterType filterType = filterTypes.get(position);
+        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+            @Override
+            public void run() {
+                DHImageFilter filter = DHImageFilterFactory.filterForType(filterType);
+                if (lastFilter == null) {
+                    picture.addTarget(filter);
+                } else {
+                    lastFilter.removeAllTargets();
+                    lastFilter.addTarget(filter);
+                }
+                lastFilter = filter;
+                lastFilter.addTarget(imageView);
+                picture.processImage();
+            }
+        });
     }
 }
