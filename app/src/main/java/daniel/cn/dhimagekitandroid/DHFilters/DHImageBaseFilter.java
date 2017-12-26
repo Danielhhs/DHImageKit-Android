@@ -39,6 +39,11 @@ public class DHImageBaseFilter extends GPUImageFilter implements IDHImageUpdatab
         setFloat(strengthUniform, strength);
     }
 
+    @Override
+    public void updateWithPercent(float percent) {
+
+    }
+
     public float getMinValue() {
         return minValue;
     }
@@ -57,6 +62,11 @@ public class DHImageBaseFilter extends GPUImageFilter implements IDHImageUpdatab
 
     public float getInitialValue() {
         return initialValue;
+    }
+
+    @Override
+    public float getCurrentValue() {
+        return 0;
     }
 
     public void setInitialValue(float initialValue) {

@@ -600,7 +600,33 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHIm
     }
 
     @Override
+    public void updateWithPercent(float percent) {
+        float value = (getMaxValue() - getMinValue()) * percent + getMinValue();
+        updateWithInput(value);
+    }
+
+    @Override
+    public float getMinValue() {
+        return 0;
+    }
+
+    @Override
+    public float getMaxValue() {
+        return 0;
+    }
+
+    @Override
+    public float getInitialValue() {
+        return 0;
+    }
+
+    @Override
     public void updateWithInput(float input) {
 
+    }
+
+    @Override
+    public float getCurrentValue() {
+        return 0;
     }
 }

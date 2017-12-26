@@ -81,7 +81,7 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float brightness = seekBar.getProgress() / 100.f;
         Log.d("hhs", brightness + "");
-        filter.setBrightness(brightness);
+        filter.updateWithPercent(brightness);
         picture.processImage();
     }
 

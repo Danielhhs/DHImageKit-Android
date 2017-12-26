@@ -18,7 +18,7 @@ public class DHImageBrightnessFilter extends DHImageFilter {
             " }";
 
     private int brightnessUniform;
-    private float brightness;
+    private float brightness;   //min: -1, max: 1, initial 0
 
     public DHImageBrightnessFilter() {
         super(DH_VERTEX_SHADER_STRING, DH_BRIGHTNESS_FRAGMENT_SHADER);
@@ -38,5 +38,25 @@ public class DHImageBrightnessFilter extends DHImageFilter {
     @Override
     public void updateWithInput(float input) {
         setBrightness(input);
+    }
+
+    @Override
+    public float getMinValue() {
+        return -1.f;
+    }
+
+    @Override
+    public float getMaxValue() {
+        return 1.f;
+    }
+
+    @Override
+    public float getInitialValue() {
+        return 0.f;
+    }
+
+    @Override
+    public float getCurrentValue() {
+        return brightness;
     }
 }

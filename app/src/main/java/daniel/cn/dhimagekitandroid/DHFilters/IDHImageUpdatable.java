@@ -7,5 +7,10 @@ package daniel.cn.dhimagekitandroid.DHFilters;
 public interface IDHImageUpdatable {
 
     public void updateWithStrength(float strength);
+    public void updateWithPercent(float percent);
     public void updateWithInput(float input);
+    public float getMinValue();
+    public float getMaxValue();
+    public float getInitialValue();
+    public float getCurrentValue();
 }

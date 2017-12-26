@@ -18,8 +18,33 @@ public class DHImageFilterGroup extends GPUImageFilterGroup implements IDHImageU
         }
     }
 
+    @Override
+    public void updateWithPercent(float percent) {
+
+    }
+
     public void updateWithInput(float input) {
 
+    }
+
+    @Override
+    public float getMinValue() {
+        return 0;
+    }
+
+    @Override
+    public float getMaxValue() {
+        return 0;
+    }
+
+    @Override
+    public float getInitialValue() {
+        return 0;
+    }
+
+    @Override
+    public float getCurrentValue() {
+        return 0;
     }
 
     public double getStrength() {
