@@ -1,5 +1,7 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
+
 /**
  * Created by huanghongsen on 2017/12/26.
  */
@@ -21,7 +23,16 @@ public class DHImageContrastFilter extends DHImageFilter {
     private float contrast;
 
     public DHImageContrastFilter() {
-        super(DH_VERTEX_SHADER_STRING, DH_BRIGHTNESS_FRAGMENT_SHADER);
+        this(-1.f, 1.f, 0.f);
+    }
+
+    public DHImageContrastFilter(DHImageFilterParameters parameters) {
+        this(parameters.minValue, parameters.maxValue, parameters.initialValue);
+    }
+
+    public DHImageContrastFilter(float minValue, float maxValue, float initialValue) {
+
+        super(DH_VERTEX_SHADER_STRING, DH_BRIGHTNESS_FRAGMENT_SHADER, minValue, maxValue, initialValue);
 
         contrastUniform = filterProgram.getUniformIndex("contrast");
         setContrast(1.f);
@@ -34,21 +45,6 @@ public class DHImageContrastFilter extends DHImageFilter {
     public void setContrast(float contrast) {
         this.contrast = contrast;
         setFloatUniform(contrast, contrastUniform, filterProgram);
-    }
-
-    @Override
-    public float getMinValue() {
-        return 0.f;
-    }
-
-    @Override
-    public float getMaxValue() {
-        return 4.f;
-    }
-
-    @Override
-    public float getInitialValue() {
-        return 1.f;
     }
 
     @Override

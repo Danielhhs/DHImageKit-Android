@@ -129,6 +129,7 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHIm
     protected boolean isEndProcessing;
     protected DHImageSize currentFilterSize;
     protected DHImageRotationMode inputRotationMode;
+    protected  float minValue, maxValue, initialValue;
 
     public boolean currentlyReceivingMonochromeInput;
     public boolean preventRendering;
@@ -150,6 +151,9 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHIm
         backgroundColorGreen = 0.f;
         backgroundColorBlue = 0.f;
         backgroundColorAlpha = 0.f;
+        minValue = 0.f;
+        maxValue = 0.f;
+        initialValue = 0.f;
 
         //TO-DO: Run on video processing Queue
         //TO-DO: Add program cache
@@ -172,6 +176,14 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHIm
         GLES20.glEnableVertexAttribArray(filterPositionAttribute);
         GLES20.glEnableVertexAttribArray(filterTexCoordAttribute);
 
+    }
+
+    public DHImageFilter(String vertexShader, String fragmentShader, float minVlaue, float maxValue, float initialValue) {
+        this(vertexShader, fragmentShader);
+        this.minValue = minVlaue;
+        this.maxValue = maxValue;
+        this.initialValue = initialValue;
+        updateWithInput(initialValue);
     }
 
     public void initializeAttributes() {
@@ -606,17 +618,17 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHIm
 
     @Override
     public float getMinValue() {
-        return 0;
+        return minValue;
     }
 
     @Override
     public float getMaxValue() {
-        return 0;
+        return maxValue;
     }
 
     @Override
     public float getInitialValue() {
-        return 0;
+        return initialValue;
     }
 
     @Override

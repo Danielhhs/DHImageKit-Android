@@ -1,5 +1,7 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
+
 /**
  * Created by huanghongsen on 2017/12/25.
  */
@@ -21,7 +23,15 @@ public class DHImageBrightnessFilter extends DHImageFilter {
     private float brightness;   //min: -1, max: 1, initial 0
 
     public DHImageBrightnessFilter() {
-        super(DH_VERTEX_SHADER_STRING, DH_BRIGHTNESS_FRAGMENT_SHADER);
+        this(-1.f, 1.f, 0.f);
+    }
+
+    public DHImageBrightnessFilter(DHImageFilterParameters parameters) {
+        this(parameters.minValue, parameters.maxValue, parameters.initialValue);
+    }
+
+    public DHImageBrightnessFilter(float minValue, float maxValue, float initialValue) {
+        super(DH_VERTEX_SHADER_STRING, DH_BRIGHTNESS_FRAGMENT_SHADER, minValue, maxValue, initialValue);
         brightnessUniform = filterProgram.getUniformIndex("brightness");
         setBrightness(0.f);
     }
@@ -38,21 +48,6 @@ public class DHImageBrightnessFilter extends DHImageFilter {
     @Override
     public void updateWithInput(float input) {
         setBrightness(input);
-    }
-
-    @Override
-    public float getMinValue() {
-        return -1.f;
-    }
-
-    @Override
-    public float getMaxValue() {
-        return 1.f;
-    }
-
-    @Override
-    public float getInitialValue() {
-        return 0.f;
     }
 
     @Override

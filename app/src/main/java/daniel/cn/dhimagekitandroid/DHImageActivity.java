@@ -8,6 +8,8 @@ import android.util.Log;
 import android.widget.SeekBar;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageBrightnessFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageContrastFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
@@ -18,7 +20,7 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
     DHImagePicture picture;
     DHImageViewRenderer renderer;
 
-    DHImageBrightnessFilter filter;
+    DHImageFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,7 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
         DHImageView imageView = (DHImageView)findViewById(R.id.dhImageView);
         picture = new DHImagePicture(loadImage());
 
-        DHImageBrightnessFilter filter = new DHImageBrightnessFilter();
-        filter.setBrightness(0.3f);
+        DHImageContrastFilter filter = new DHImageContrastFilter();
         picture.addTarget(filter);
         filter.addTarget(imageView);
         this.filter = filter;
@@ -64,9 +65,8 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        float brightness = seekBar.getProgress() / 100.f;
-        Log.d("hhs", brightness + "");
-        filter.updateWithPercent(brightness);
+        float percent = seekBar.getProgress() / 100.f;
+        filter.updateWithPercent(percent);
         picture.processImage();
     }
 
