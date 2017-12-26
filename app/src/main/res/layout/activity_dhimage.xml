@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="daniel.cn.dhimagekitandroid.DHImageActivity">
 
-    <daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageView
+    <daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView
         android:id="@+id/dhImageView"
         android:layout_width="match_parent"
         android:layout_height="395dp"
@@ -17,7 +17,7 @@
         tools:layout_editor_absoluteY="16dp">
 
 
-    </daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageView>
+    </daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView>
 
 
     <SeekBar

@@ -2,31 +2,16 @@ package daniel.cn.dhimagekitandroid;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 
-import java.nio.IntBuffer;
-
-import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageBrightnessFilter;
-import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
-import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageView;
-import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageViewRenderer;
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageViewRenderer;
 
 public class DHImageActivity extends AppCompatActivity implements IDHImageSurfaceListener, SeekBar.OnSeekBarChangeListener {
 

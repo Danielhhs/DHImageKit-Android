@@ -10,9 +10,6 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
-import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
-import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageSurfaceTexture;
-
 import static javax.microedition.khronos.egl.EGL10.EGL_ALPHA_SIZE;
 import static javax.microedition.khronos.egl.EGL10.EGL_BLUE_SIZE;
 import static javax.microedition.khronos.egl.EGL10.EGL_DEFAULT_DISPLAY;
@@ -32,6 +29,7 @@ import static javax.microedition.khronos.egl.EGL10.EGL_WIDTH;
 public class DHImageContext {
     private static GLProgram currentShaderProgram;
     private static DHImageContext currentContext;
+    private static DHImageFrameBufferCache frameBufferCache;
 
     EGL10 mEGL;
     EGLDisplay mEGLDisplay;
@@ -44,10 +42,16 @@ public class DHImageContext {
 
     int mWidth, mHeight;
 
-
     public static void setActiveProgram(GLProgram program) {
         currentShaderProgram = program;
         program.use();
+    }
+
+    public static DHImageFrameBufferCache sharedFrameBufferCache() {
+        if (frameBufferCache == null) {
+            frameBufferCache = new DHImageFrameBufferCache();
+        }
+        return frameBufferCache;
     }
 
     //Surface management
@@ -153,6 +157,8 @@ public class DHImageContext {
         };
         mEGLContext = mEGL.eglCreateContext(mEGLDisplay, mEGLConfig, EGL_NO_CONTEXT, attrib_list);
         mGL = (GL10)mEGLContext.getGL();
+
+        frameBufferCache = new DHImageFrameBufferCache();
     }
 
     private EGLConfig chooseConfig() {

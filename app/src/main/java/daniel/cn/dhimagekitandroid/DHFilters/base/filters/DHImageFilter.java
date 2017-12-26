@@ -7,12 +7,10 @@ import android.util.Log;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.egl.EGLSurface;
-import javax.microedition.khronos.opengles.GL10;
 
 import daniel.cn.dhimagekitandroid.DHFilters.IDHImageUpdatable;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
@@ -20,9 +18,9 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
-import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageFrameBuffer;
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageOutput;
-import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageSurfaceTexture;
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageSurfaceTexture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHMatrix3X3;
@@ -183,7 +181,7 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHIm
 
     public void setupFilterForSize(DHImageSize size) {
         mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int)size.width, (int)size.height);
-        frameBuffer = new DHImageFrameBuffer(size);
+        frameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(size, getOutputTextureOptions(), false);
         mOutputSurfaceTexture = DHImageContext.getCurrentContext().createSurfaceTexture(frameBuffer.getTexture(), mSurface);
     }
 
@@ -292,6 +290,7 @@ public class DHImageFilter extends DHImageOutput implements IDHImageInput, IDHIm
                 target.newFrameReady(time, textureIndex);
             }
         }
+        frameBuffer.unlock();
     }
 
 

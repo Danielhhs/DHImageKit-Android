@@ -1,4 +1,4 @@
-package daniel.cn.dhimagekitandroid.DHFilters.base.output;
+package daniel.cn.dhimagekitandroid.DHFilters.base;
 
 import android.graphics.SurfaceTexture;
 

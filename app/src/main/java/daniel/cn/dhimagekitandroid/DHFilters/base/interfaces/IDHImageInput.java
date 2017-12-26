@@ -3,7 +3,7 @@ package daniel.cn.dhimagekitandroid.DHFilters.base.interfaces;
 import javax.microedition.khronos.egl.EGLSurface;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
-import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageSurfaceTexture;
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageSurfaceTexture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 /**

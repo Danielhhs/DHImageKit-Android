@@ -1,18 +1,14 @@
-package daniel.cn.dhimagekitandroid.DHFilters.base.output;
+package daniel.cn.dhimagekitandroid.DHFilters.base;
 
 import android.content.Context;
-import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
-import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.TextureView;
 import android.widget.FrameLayout;
 
 import javax.microedition.khronos.egl.EGLSurface;
 
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
-import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;

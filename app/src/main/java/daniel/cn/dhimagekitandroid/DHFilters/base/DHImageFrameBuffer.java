@@ -1,4 +1,4 @@
-package daniel.cn.dhimagekitandroid.DHFilters.base.output;
+package daniel.cn.dhimagekitandroid.DHFilters.base;
 
 import android.opengl.GLES20;
 
@@ -13,23 +13,70 @@ public class DHImageFrameBuffer {
     private int texture;
     private DHImageSize size;
     private DHImageTextureOptions textureOptions;
+    private boolean onlyTexture;
     private int frameBuffer;
+    private boolean referenceCountDisabled;
+    private int frameBufferReferenceCount;
 
     public DHImageFrameBuffer(DHImageSize size) {
-        initialize(size, null);
+        initialize(size, null, false);
     }
 
     public DHImageFrameBuffer(DHImageSize size, DHImageTextureOptions textureOptions) {
-        initialize(size, textureOptions);
+        initialize(size, textureOptions, false);
     }
 
-    private void initialize(DHImageSize size, DHImageTextureOptions textureOptions) {
+    public DHImageFrameBuffer(DHImageSize size, DHImageTextureOptions textureOptions, boolean onlyTexture) {
+        initialize(size, textureOptions, false);
+    }
+
+    private void initialize(DHImageSize size, DHImageTextureOptions textureOptions, boolean onlyTexture) {
         this.size = size;
         this.textureOptions = textureOptions;
+        this.onlyTexture = onlyTexture;
         if (this.textureOptions == null) {
             this.textureOptions = new DHImageTextureOptions();
         }
-        generateFrameBuffer();
+        this.referenceCountDisabled = false;
+        this.frameBufferReferenceCount = 0;
+        if (onlyTexture == false) {
+            generateFrameBuffer();
+        } else {
+            generateTexture();
+            frameBuffer = 0;
+        }
+    }
+
+    public void lock() {
+        if (this.referenceCountDisabled == true) {
+            return;
+        }
+        frameBufferReferenceCount++;
+    }
+
+    public void unlock() {
+        if (this.referenceCountDisabled == true) {
+            return;
+        }
+        if (frameBufferReferenceCount <= 0) {
+            throw new RuntimeException("ried to overrelease a framebuffer, did you forget to call -useNextFrameForImageCapture before using -imageFromCurrentFramebuffer?");
+        }
+        frameBufferReferenceCount--;
+        if (frameBufferReferenceCount < 1) {
+            DHImageContext.sharedFrameBufferCache().returnFrameBuffer(this);
+        }
+    }
+
+    public void clearAllLocks() {
+        frameBufferReferenceCount = 0;
+    }
+
+    public void disableReferenceCount() {
+        referenceCountDisabled = true;
+    }
+
+    public void enableReferenceCount() {
+        referenceCountDisabled = false;
     }
 
     private void generateFrameBuffer() {
@@ -71,7 +118,36 @@ public class DHImageFrameBuffer {
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
     }
 
+
+    public void destroy() {
+        if (frameBuffer != 0) {
+            int frameBuffers[] = new int[1];
+            frameBuffers[0] = frameBuffer;
+            GLES20.glDeleteFramebuffers(1, frameBuffers, 0);
+            frameBuffer = 0;
+        }
+        if (texture != 0) {
+            int textures[] = new int[1];
+            textures[0] = texture;
+            GLES20.glDeleteTextures(1, textures, 0);
+            texture = 0;
+        }
+    }
+
+
     public int getTexture() {
         return texture;
+    }
+
+    public DHImageSize getSize() {
+        return size;
+    }
+
+    public DHImageTextureOptions getTextureOptions() {
+        return textureOptions;
+    }
+
+    public boolean isOnlyTexture() {
+        return onlyTexture;
     }
 }
