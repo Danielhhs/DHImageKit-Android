@@ -26,9 +26,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="15dp"
-        android:layout_marginTop="20pt"
+        android:layout_marginTop="10pt"
         android:layout_alignRight="@+id/dhImageView"
         android:layout_alignEnd="@+id/dhImageView"
         android:layout_alignLeft="@+id/dhImageView"
         android:layout_alignStart="@+id/dhImageView" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
 </LinearLayout>

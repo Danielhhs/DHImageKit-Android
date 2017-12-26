@@ -16,4 +16,12 @@ public enum DHImageFilterType {
         this.name = name;
         this.chineseName = chineseName;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getChineseName() {
+        return chineseName;
+    }
 }

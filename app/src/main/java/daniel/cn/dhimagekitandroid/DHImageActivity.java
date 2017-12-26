@@ -4,12 +4,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListViewCompat;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SeekBar;
+
+import java.util.List;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageContrastFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilterFactory;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
@@ -32,6 +38,12 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
 
         SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar2);
         seekBar.setOnSeekBarChangeListener(this);
+
+        ListView listView = (ListView)findViewById(R.id.listView);
+        List filters = DHImageFilterFactory.availableFilters();
+        FilterAdapter adapter = new FilterAdapter(this, filters);
+        listView.setAdapter(adapter);
+
     }
 
     private Bitmap loadImage() {
