@@ -6,9 +6,6 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import java.io.File;
-import java.nio.IntBuffer;
-
-import javax.microedition.khronos.opengles.GL10;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
@@ -60,7 +57,7 @@ public class DHImagePicture extends DHImageOutput {
 
                     target.setCurrentlyReceivingMonochromeInput(false);
                     target.setInputSize(pixelSizeOfImage, textureIndexOfTarget);
-                    target.setInputSurfaceTexture(mSurface, mOutputSurfaceTexture, textureIndexOfTarget);
+                    target.setInputFrame(mSurface, outputFrameBuffer, textureIndexOfTarget);
                     target.newFrameReady(0, textureIndexOfTarget);
                 }
             }
@@ -95,7 +92,8 @@ public class DHImagePicture extends DHImageOutput {
     @Override
     public void destroy() {
         super.destroy();
-        mOutputSurfaceTexture = null;
+        outputFrameBuffer.unlock();
+        outputFrameBuffer = null;
     }
 
     @Override
@@ -114,10 +112,10 @@ public class DHImagePicture extends DHImageOutput {
 
         mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int)pixelSizeForTexture.width, (int)pixelSizeForTexture.height);
         DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
+        outputFrameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(pixelSizeForTexture, getOutputTextureOptions(), false);
+        outputFrameBuffer.disableReferenceCount();
 
-        mOutputSurfaceTexture = DHImageContext.getCurrentContext().createSurfaceTexture(getOutputTextureOptions(), mSurface);
-
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mOutputSurfaceTexture.getTexture());
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, outputFrameBuffer.getTexture());
         if (shouldSmoothlyScaleOutput) {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_LINEAR);
         }

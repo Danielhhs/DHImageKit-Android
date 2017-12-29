@@ -20,8 +20,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 public class DHImageOutput {
     protected EGLSurface mSurface;
-    protected DHImageFrameBuffer frameBuffer;
-    protected DHImageSurfaceTexture mOutputSurfaceTexture;
+    protected DHImageFrameBuffer outputFrameBuffer;
     protected List<IDHImageInput> targets;
     protected List<Integer> targetTextureIndices;
     protected boolean usingNextFrameForImageCapture;
@@ -48,15 +47,15 @@ public class DHImageOutput {
     }
 
     public void setInputSurfaceTextureForTarget(IDHImageInput target, int inputTextureIndex) {
-        target.setInputSurfaceTexture(mSurface, surfaceTextureForOutput(), inputTextureIndex);
+        target.setInputFrame(mSurface, frameBufferForOutput(), inputTextureIndex);
     }
 
-    public DHImageSurfaceTexture surfaceTextureForOutput() {
-        return mOutputSurfaceTexture;
+    public DHImageFrameBuffer frameBufferForOutput() {
+        return outputFrameBuffer;
     }
 
     public void removeOutputFrameBuffer() {
-        mOutputSurfaceTexture = null;
+        outputFrameBuffer = null;
     }
 
     public void notifyTargetsAboutNewOutputTexture() {

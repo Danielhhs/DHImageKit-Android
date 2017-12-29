@@ -1,6 +1,7 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base;
 
 import android.opengl.GLES20;
+import android.util.Log;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageTextureOptions;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
@@ -10,6 +11,8 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
  */
 
 public class DHImageFrameBuffer {
+    private static String LOG_TAG = "DHImageFrameBuffer";
+
     private int texture;
     private DHImageSize size;
     private DHImageTextureOptions textureOptions;
@@ -48,6 +51,7 @@ public class DHImageFrameBuffer {
     }
 
     public void lock() {
+        Log.d(LOG_TAG, ">>>>>>>>>>>>>lock frame buffer " + this + ", current count: " + frameBufferReferenceCount);
         if (this.referenceCountDisabled == true) {
             return;
         }
@@ -55,6 +59,7 @@ public class DHImageFrameBuffer {
     }
 
     public void unlock() {
+        Log.d(LOG_TAG, ">>>>>>>>>unlock frame buffer" + this + ", current count: " + frameBufferReferenceCount);
         if (this.referenceCountDisabled == true) {
             return;
         }

@@ -13,13 +13,13 @@ import java.util.concurrent.TimeUnit;
 import javax.microedition.khronos.egl.EGLSurface;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
 import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageValues;
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageSurfaceTexture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHMatrix3X3;
@@ -119,7 +119,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     private Semaphore semaphore;
 
     protected EGLSurface mSourceSurface;
-    protected DHImageSurfaceTexture firstInputSurfaceTexture;
+    protected DHImageFrameBuffer firstInputFrameBuffer;
     protected GLProgram filterProgram;
     protected int filterPositionAttribute;
     protected int filterTexCoordAttribute;
@@ -256,14 +256,17 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
         if (mSurface == null) {
             mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) outputFrameSize().width, (int) outputFrameSize().height);
         }
-        frameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(outputFrameSize(), getOutputTextureOptions(), false);
-        mOutputSurfaceTexture = DHImageContext.getCurrentContext().createSurfaceTexture(frameBuffer.getTexture(), mSurface);
+        outputFrameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(outputFrameSize(), getOutputTextureOptions(), false);
         DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, mSourceSurface);
         if (preventRendering) {
+            firstInputFrameBuffer.unlock();
             return;
         }
 
-        frameBuffer.activate();
+        outputFrameBuffer.activate();
+        if (usingNextFrameForImageCapture) {
+            outputFrameBuffer.lock();
+        }
 
         DHImageContext.setActiveProgram(filterProgram);
 
@@ -272,7 +275,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, firstInputSurfaceTexture.getTexture());
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, firstInputFrameBuffer.getTexture());
         GLES20.glUniform1i(filterInputTextureUniform, 2);
 
         FloatBuffer vertexBuffer = ByteBuffer.allocateDirect(vertices.length * 4)
@@ -290,7 +293,8 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
-        frameBuffer.deactivate();
+        outputFrameBuffer.deactivate();
+        firstInputFrameBuffer.unlock();
         if (usingNextFrameForImageCapture) {
             semaphore.release();
         }
@@ -302,12 +306,21 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
             if (!target.equals(getTargetToIgnoreForUpdates())) {
                 int indexOfObject = targets.indexOf(target);
                 int textureIndex = targetTextureIndices.get(indexOfObject);
-                target.setInputSurfaceTexture(mSurface, surfaceTextureForOutput(), textureIndex);
+                target.setInputFrame(mSurface, frameBufferForOutput(), textureIndex);
                 target.setInputSize(outputFrameSize(), textureIndex);
+            }
+        }
+        outputFrameBuffer.unlock();
+        if (!usingNextFrameForImageCapture) {
+            removeOutputFrameBuffer();
+        }
+        for (IDHImageInput target : targets) {
+            if (!target.equals(getTargetToIgnoreForUpdates())) {
+                int indexOfObject = targets.indexOf(target);
+                int textureIndex = targetTextureIndices.get(indexOfObject);
                 target.newFrameReady(time, textureIndex);
             }
         }
-        frameBuffer.unlock();
     }
 
 
@@ -533,16 +546,13 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     @Override
-    public void setInputSurfaceTexture(EGLSurface surface, DHImageSurfaceTexture surfaceTexture, int index) {
+    public void setInputFrame(EGLSurface surface, DHImageFrameBuffer inputFrameBuffer, int index) {
         mSourceSurface = surface;
-        firstInputSurfaceTexture = surfaceTexture;
+        firstInputFrameBuffer = inputFrameBuffer;
+        if (firstInputFrameBuffer != null) {
+            firstInputFrameBuffer.lock();
+        }
     }
-
-//    @Override
-//    public void setInputFrameBuffer(DHImageFrameBuffer frameBuffer, int index) {
-//        firstInputFrameBuffer = frameBuffer;
-//        firstInputFrameBuffer.lock();
-//    }
 
     @Override
     public int nextAvailableTextureIndex() {

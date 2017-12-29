@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.microedition.khronos.egl.EGLSurface;
 
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageSurfaceTexture;
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
@@ -111,10 +111,10 @@ public class DHImageFilterGroup extends DHImageFilterBase {
     }
 
     @Override
-    public void setInputSurfaceTexture(EGLSurface inputSurface, DHImageSurfaceTexture surfaceTexture, int index) {
+    public void setInputFrame(EGLSurface inputSurface, DHImageFrameBuffer inputFrameBuffer, int index) {
         if (initialFilters == null) return;
         for (DHImageFilterBase filter : initialFilters) {
-            filter.setInputSurfaceTexture(inputSurface, surfaceTexture, index);
+            filter.setInputFrame(inputSurface, inputFrameBuffer, index);
         }
     }
 

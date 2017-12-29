@@ -97,7 +97,7 @@ public class DHImageViewRenderer {
     protected DHImageRotationMode inputRotation = DHImageRotationMode.NoRotation;
 
     private EGLSurface mSurface, sourceSurface;
-    private DHImageSurfaceTexture mSurfaceTexture;
+    private DHImageFrameBuffer mInputFrameBuffer;
     private GLProgram displayProgram;
     private int displayPositionAttribute, displayTexCoordsAttribute;
     private int displayTextureUniform;
@@ -242,19 +242,24 @@ public class DHImageViewRenderer {
 
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE4);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mSurfaceTexture.getTexture());
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mInputFrameBuffer.getTexture());
         GLES20.glUniform1i(displayTextureUniform, 4);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
+        mInputFrameBuffer.unlock();
+        mInputFrameBuffer = null;
     }
 
-    public DHImageSurfaceTexture getSurfaceTexture() {
-        return mSurfaceTexture;
+    public DHImageFrameBuffer getmInputFrameBuffer() {
+        return mInputFrameBuffer;
     }
 
-    public void setSurfaceTexture(EGLSurface sourceSurface, DHImageSurfaceTexture surfaceTexture) {
-        this.mSurfaceTexture = surfaceTexture;
+    public void setInputFrameBuffer(EGLSurface sourceSurface, DHImageFrameBuffer inputFrameBuffer) {
+        this.mInputFrameBuffer = inputFrameBuffer;
+        if (mInputFrameBuffer != null) {
+            this.mInputFrameBuffer.lock();
+        }
         this.sourceSurface = sourceSurface;
     }
 
