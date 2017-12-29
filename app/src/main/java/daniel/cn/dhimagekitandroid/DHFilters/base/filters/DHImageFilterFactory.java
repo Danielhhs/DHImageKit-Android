@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageBrightnessFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageContrastFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
 /**
@@ -46,4 +49,5 @@ public class DHImageFilterFactory {
         }
         return null;
     }
+
 }

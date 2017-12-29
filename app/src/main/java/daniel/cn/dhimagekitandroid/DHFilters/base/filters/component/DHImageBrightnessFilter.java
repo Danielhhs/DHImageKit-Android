@@ -1,5 +1,7 @@
-package daniel.cn.dhimagekitandroid.DHFilters.base.filters;
+package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
 /**
@@ -21,6 +23,10 @@ public class DHImageBrightnessFilter extends DHImageFilter {
 
     private int brightnessUniform;
     private float brightness;   //min: -1, max: 1, initial 0
+
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Brightness;
+    }
 
     public DHImageBrightnessFilter() {
         this(-1.f, 1.f, 0.f);

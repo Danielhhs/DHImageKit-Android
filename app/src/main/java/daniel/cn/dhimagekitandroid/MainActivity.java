@@ -15,7 +15,7 @@ import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 
-import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditComponent;
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEditComponent;
 import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         gridView.setOnItemClickListener(this);
 
         gpuImageView = (GPUImageView)findViewById(R.id.imageView);
-        DHImageEditor.sharedEditor().initializeEditor(loadImage(), gpuImageView, null);
+//        DHImageEditor.sharedEditor().initializeEditor(loadImage(), gpuImageView, null);
 
         ((SeekBar)findViewById(R.id.seekBar)).setOnSeekBarChangeListener(this);
 
@@ -79,10 +79,10 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        DHImageEditComponent component = DHImageEditComponent.allComponents().get(i);
-        DHImageEditor.sharedEditor().startProcessing(component);
-        SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
-        seekBar.setProgress(50);
+//        DHImageEditComponent component = DHImageEditComponent.allComponents().get(i);
+//        DHImageEditor.sharedEditor().startProcessing(component);
+//        SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
+//        seekBar.setProgress(50);
     }
 
     @Override

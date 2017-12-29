@@ -1,5 +1,7 @@
-package daniel.cn.dhimagekitandroid.DHFilters.base.filters;
+package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
 /**
@@ -22,8 +24,12 @@ public class DHImageContrastFilter extends DHImageFilter {
     private int contrastUniform;
     private float contrast;
 
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Contrast;
+    }
+
     public DHImageContrastFilter() {
-        this(-1.f, 1.f, 0.f);
+        this(0.f, 4.f, 1.f);
     }
 
     public DHImageContrastFilter(DHImageFilterParameters parameters) {

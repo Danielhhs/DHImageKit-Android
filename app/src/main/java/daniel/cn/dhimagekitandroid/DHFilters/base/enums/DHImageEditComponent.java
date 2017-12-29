@@ -1,11 +1,10 @@
-package daniel.cn.dhimagekitandroid.DHFilters;
+package daniel.cn.dhimagekitandroid.DHFilters.base.enums;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by huanghongsen on 2017/12/7.
@@ -13,11 +12,12 @@ import java.util.Objects;
 
 public enum DHImageEditComponent {
 
-    Brightness("亮度", 1, -0.25f, 0.25f, 0.f),
-    Contrast("对比度", 2, 0.7f, 1.3f, 1.f);
+    Brightness(DHImageFilterType.Brightness, -0.25f, 0.25f, 0.f),
+    Contrast(DHImageFilterType.Contrast, 0.7f, 1.3f, 1.f);
 
-    private DHImageEditComponent(String name, int index, float minValue, float maxValue, float initialValue) {
-        this.name = name;
+    private DHImageEditComponent(DHImageFilterType filterType, float minValue, float maxValue, float initialValue) {
+        this.name = filterType.getName();
+        this.chineseName = filterType.getChineseName();
         this.index = index;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -25,6 +25,7 @@ public enum DHImageEditComponent {
     }
 
     private String name;
+    private String chineseName;
     private int index;
     private float minValue;
     private float maxValue;

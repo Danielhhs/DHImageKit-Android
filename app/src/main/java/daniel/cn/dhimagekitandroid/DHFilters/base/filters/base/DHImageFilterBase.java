@@ -1,5 +1,6 @@
-package daniel.cn.dhimagekitandroid.DHFilters.base.filters;
+package daniel.cn.dhimagekitandroid.DHFilters.base.filters.base;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageUpdatable;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageOutput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;

@@ -10,13 +10,10 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLSurface;
 
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
-import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageSurfaceTexture;
-import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageViewFillMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
-import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 /**

@@ -1,4 +1,4 @@
-package daniel.cn.dhimagekitandroid.DHFilters.base.filters;
+package daniel.cn.dhimagekitandroid.DHFilters.base.filters.base;
 
 import android.graphics.Bitmap;
 
@@ -10,8 +10,6 @@ import javax.microedition.khronos.egl.EGLSurface;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageSurfaceTexture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
-import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageUpdatable;
-import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageOutput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 /**

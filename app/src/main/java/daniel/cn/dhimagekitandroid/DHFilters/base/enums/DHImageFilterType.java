@@ -1,11 +1,12 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.enums;
 
 /**
- * Created by huanghongsen on 2017/12/26.
+ * Created by huanghongsen on 2017/12/29.
  */
 
-public enum DHImageFilterType {
+public enum  DHImageFilterType {
 
+    None("None", "无"),
     Brightness("Brightness", "亮度"),
     Contrast("Contrast", "对比度");
 

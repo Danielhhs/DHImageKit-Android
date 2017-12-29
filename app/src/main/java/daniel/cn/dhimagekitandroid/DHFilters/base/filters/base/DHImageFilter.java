@@ -1,4 +1,4 @@
-package daniel.cn.dhimagekitandroid.DHFilters.base.filters;
+package daniel.cn.dhimagekitandroid.DHFilters.base.filters.base;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
@@ -12,14 +12,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.egl.EGLSurface;
 
-import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageUpdatable;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageValues;
-import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImageOutput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageSurfaceTexture;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
@@ -186,17 +185,16 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
         updateWithInput(initialValue);
     }
 
+    public DHImageFilterType getType() {
+        return DHImageFilterType.None;
+    }
+
     public void initializeAttributes() {
         filterProgram.addAttribute("position");
         filterProgram.addAttribute("inputTextureCoordinate");
     }
 
     public void setupFilterForSize(DHImageSize size) {
-        if (mSurface == null) {
-            mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) size.width, (int) size.height);
-        }
-        frameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(size, getOutputTextureOptions(), false);
-        mOutputSurfaceTexture = DHImageContext.getCurrentContext().createSurfaceTexture(frameBuffer.getTexture(), mSurface);
     }
 
     public DHImageSize rotatedSize(DHImageSize sizeToRotate, int textureIndex) {
@@ -255,6 +253,11 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void renderToTexture(float[] vertices, float[]texCoords) {
+        if (mSurface == null) {
+            mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) outputFrameSize().width, (int) outputFrameSize().height);
+        }
+        frameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(outputFrameSize(), getOutputTextureOptions(), false);
+        mOutputSurfaceTexture = DHImageContext.getCurrentContext().createSurfaceTexture(frameBuffer.getTexture(), mSurface);
         DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, mSourceSurface);
         if (preventRendering) {
             return;
