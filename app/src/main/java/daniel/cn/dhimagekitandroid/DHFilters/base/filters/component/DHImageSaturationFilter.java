@@ -47,7 +47,7 @@ public class DHImageSaturationFilter extends DHImageFilter {
     public DHImageSaturationFilter(float minValue, float maxValue, float initialValue) {
         super(DH_VERTEX_SHADER_STRING, DH_SATURATION_FRAGMENT_SHADER, minValue, maxValue, initialValue);
         saturationUniform = filterProgram.getUniformIndex("saturation");
-        setSaturation(1.f);
+        setSaturation(initialValue);
     }
 
     public float getSaturation() {

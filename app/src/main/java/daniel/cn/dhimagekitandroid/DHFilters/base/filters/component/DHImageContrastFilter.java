@@ -41,7 +41,7 @@ public class DHImageContrastFilter extends DHImageFilter {
         super(DH_VERTEX_SHADER_STRING, DH_BRIGHTNESS_FRAGMENT_SHADER, minValue, maxValue, initialValue);
 
         contrastUniform = filterProgram.getUniformIndex("contrast");
-        setContrast(1.f);
+        setContrast(initialValue);
     }
 
     public float getContrast() {

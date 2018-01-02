@@ -39,7 +39,7 @@ public class DHImageBrightnessFilter extends DHImageFilter {
     public DHImageBrightnessFilter(float minValue, float maxValue, float initialValue) {
         super(DH_VERTEX_SHADER_STRING, DH_BRIGHTNESS_FRAGMENT_SHADER, minValue, maxValue, initialValue);
         brightnessUniform = filterProgram.getUniformIndex("brightness");
-        setBrightness(0.f);
+        setBrightness(initialValue);
     }
 
     public float getBrightness() {

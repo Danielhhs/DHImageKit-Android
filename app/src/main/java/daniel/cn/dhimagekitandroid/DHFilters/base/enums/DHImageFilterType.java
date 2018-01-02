@@ -9,7 +9,8 @@ public enum  DHImageFilterType {
     None("None", "无"),
     Brightness("Brightness", "亮度"),
     Contrast("Contrast", "对比度"),
-    Saturation("Saturation", "饱和度");
+    Saturation("Saturation", "饱和度"),
+    Warmth("Warmth", "暖色调");
 
     private String name;
     private String chineseName;
