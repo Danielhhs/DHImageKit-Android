@@ -13,7 +13,8 @@ public enum  DHImageFilterType {
     Warmth("Warmth", "暖色调"),
     Structure("Structure", "层级"),
     Vignette("Vignette", "黑边"),
-    Fade("Fade", "渐隐");
+    Fade("Fade", "渐隐"),
+    Sharpen("Sharpen", "锐化");
 
     private String name;
     private String chineseName;
