@@ -8,6 +8,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageContrastFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageHazeFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageHighlightFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageSaturationFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageShadowFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageSharpenFilter;
@@ -39,6 +40,7 @@ public class DHImageFilterFactory {
         filters.add(DHImageFilterType.Fade);
         filters.add(DHImageFilterType.Sharpen);
         filters.add(DHImageFilterType.Shadow);
+        filters.add(DHImageFilterType.Highlight);
 
         return filters;
     }
@@ -59,6 +61,7 @@ public class DHImageFilterFactory {
             case Fade: return new DHImageHazeFilter(parameters);
             case Sharpen: return new DHImageSharpenFilter(parameters);
             case Shadow: return new DHImageShadowFilter(parameters);
+            case Highlight: return new DHImageHighlightFilter(parameters);
         }
         return null;
     }
@@ -74,6 +77,7 @@ public class DHImageFilterFactory {
             case Fade: return new DHImageFilterParameters(-0.2f, 0.f, 0.f);
             case Sharpen: return new DHImageFilterParameters(0.f, 4.f, 0.f);
             case Shadow: return new DHImageFilterParameters(0.9f, 1.1f, 1.f);
+            case Highlight: return new DHImageFilterParameters(0.9f, 1.1f, 1.f);
         }
         return null;
     }
