@@ -8,6 +8,11 @@ public class DHImagePoint {
     public float x;
     public float y;
 
+    public DHImagePoint() {
+        this.x = 0.f;
+        this.y = 0.f;
+    }
+
     public DHImagePoint(float x, float y) {
         this.x = x;
         this.y = y;

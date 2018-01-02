@@ -11,7 +11,8 @@ public enum  DHImageFilterType {
     Contrast("Contrast", "对比度"),
     Saturation("Saturation", "饱和度"),
     Warmth("Warmth", "暖色调"),
-    Structure("Structure", "层级");
+    Structure("Structure", "层级"),
+    Vignette("Vignette", "黑边");
 
     private String name;
     private String chineseName;
