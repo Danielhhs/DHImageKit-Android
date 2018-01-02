@@ -7,6 +7,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageContrastFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageHazeFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageSaturationFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageStructureFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageVignetteFilter;
@@ -33,6 +34,7 @@ public class DHImageFilterFactory {
         filters.add(DHImageFilterType.Warmth);
         filters.add(DHImageFilterType.Structure);
         filters.add(DHImageFilterType.Vignette);
+        filters.add(DHImageFilterType.Fade);
 
         return filters;
     }
@@ -50,6 +52,7 @@ public class DHImageFilterFactory {
             case Warmth: return new DHImageWarmthFilter(parameters);
             case Structure: return new DHImageStructureFilter(parameters);
             case Vignette: return new DHImageVignetteFilter(parameters);
+            case Fade: return new DHImageHazeFilter(parameters);
         }
         return null;
     }
@@ -62,6 +65,7 @@ public class DHImageFilterFactory {
             case Warmth: return new DHImageFilterParameters(3500.f, 6500.f, 5000.f);
             case Structure: return new DHImageFilterParameters(0.f, 0.25f, 0.f);
             case Vignette: return new DHImageFilterParameters(0.75f, 1.5f, 0.75f);
+            case Fade: return new DHImageFilterParameters(-0.2f, 0.f, 0.f);
         }
         return null;
     }
