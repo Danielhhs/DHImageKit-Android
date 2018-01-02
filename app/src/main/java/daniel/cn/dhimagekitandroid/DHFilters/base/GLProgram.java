@@ -52,6 +52,10 @@ public class GLProgram {
         return attributes.indexOf(attribute);
     }
 
+    public int getAttributeLocation(String attribute) {
+        return GLES20.glGetAttribLocation(program, attribute);
+    }
+
     public int getUniformIndex(String uniform) {
         return GLES20.glGetUniformLocation(program, uniform);
     }

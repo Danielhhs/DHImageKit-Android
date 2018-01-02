@@ -158,6 +158,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
         //TO-DO: Add program cache
         filterProgram = new GLProgram(vertexShaderString, fragmentShaderString);
         if (filterProgram != null && !filterProgram.isInitialized()) {
+            filterProgram.use();
             initializeAttributes();
             boolean linked = filterProgram.link();
             if (linked == false) {

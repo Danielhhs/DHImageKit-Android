@@ -15,28 +15,32 @@ import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
+import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEditComponent;
 import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
+import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.blend.DHImageAlphaBlendFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
+import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
-public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener, View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements IDHImageSurfaceListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener, View.OnClickListener{
 
-    private GPUImageView gpuImageView;
+    private DHImageView gpuImageView;
+    private DHImagePicture picture;
+    private DHImagePicture overlayPicture;
+    private DHImageAlphaBlendFilter filter;
+
     private ArrayList<String> filterNames;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GridView gridView = (GridView)findViewById(R.id.gridView);
-        String []from = {"name"};
-        int []to = {R.id.componentNameText};
-        SimpleAdapter adapter = new SimpleAdapter(this, DHImageEditComponent.componentNames(), R.layout.component_item, from, to);
-        gridView.setAdapter(adapter);
-        gridView.setOnItemClickListener(this);
-
-        gpuImageView = (GPUImageView)findViewById(R.id.imageView);
-//        DHImageEditor.sharedEditor().initializeEditor(loadImage(), gpuImageView, null);
+        gpuImageView = (DHImageView)findViewById(R.id.imageView);
+        gpuImageView.setSurfaceListener(this);
 
         ((SeekBar)findViewById(R.id.seekBar)).setOnSeekBarChangeListener(this);
 
@@ -88,5 +92,31 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     @Override
     public void onClick(View view) {
         startActivity(new Intent(this, DHImageActivity.class));
+    }
+
+    @Override
+    public void onSurfaceTextureAvailable() {
+        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+            @Override
+            public void run() {
+                picture = new DHImagePicture(loadImage());
+                overlayPicture = new DHImagePicture(loadOverlayPicture());
+                filter = new DHImageAlphaBlendFilter();
+                picture.addTarget(filter, 0);
+                overlayPicture.addTarget(filter, 1);
+                filter.addTarget(gpuImageView);
+                picture.processImage();
+                overlayPicture.processImage();
+//                DHImageFilter defaultFilter = new DHImageFilter();
+//                overlayPicture.addTarget(defaultFilter);
+//                defaultFilter.addTarget(gpuImageView);
+//                overlayPicture.processImage();
+            }
+        });
+    }
+
+    private Bitmap loadOverlayPicture() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.overlay);
+        return bitmap;
     }
 }

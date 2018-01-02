@@ -13,6 +13,14 @@ public class DHImageSize {
         this.height = height;
     }
 
+    public DHImageSize(DHImageSize size) {
+        if (size == null) {
+            return;
+        }
+        this.width = size.width;
+        this.height = size.height;
+    }
+
     public static DHImageSize zeroSize() {
         return new DHImageSize(0.f, 0.f);
     }

@@ -24,15 +24,6 @@ public class DHImageViewRenderer {
 
     public static final String LOG_TAG = "DHImageViewRenderer";
 
-    public static final String DH_RED_FRAGMENT_SHADER = "varying highp vec2 textureCoordinate;\n" +
-            " \n" +
-            " uniform sampler2D inputImageTexture;\n" +
-            " \n" +
-            " void main()\n" +
-            " {\n" +
-            "     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n" +
-            " }";
-
     static float noRotationTextureCoordinates[] = {
             0.0f, 1.0f,
             1.0f, 1.0f,
@@ -151,7 +142,7 @@ public class DHImageViewRenderer {
         GLES20.glEnableVertexAttribArray(displayPositionAttribute);
         GLES20.glEnableVertexAttribArray(displayTexCoordsAttribute);
 
-        setBackgroundColor(1.f, 0.f, 0.f, 1.f);
+        setBackgroundColor(0.f, 0.f, 0.f, 1.f);
         fillMode = DHImageViewFillMode.PreserveAspectRatio;
         initialized = true;
     }
@@ -229,7 +220,7 @@ public class DHImageViewRenderer {
         vertexBuffer.put(imageVertices).position(0);
 
         float texCoords[] = textureCoordinateForRotation(inputRotation);
-        FloatBuffer texCoordsBuffer = ByteBuffer.allocateDirect(noRotationTextureCoordinates.length * 4)
+        FloatBuffer texCoordsBuffer = ByteBuffer.allocateDirect(texCoords.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
         texCoordsBuffer.put(texCoords).position(0);
@@ -280,8 +271,7 @@ public class DHImageViewRenderer {
             @Override
             public void run() {
                 DHImageSize rotatedSize = new DHImageSize(inputImageSize.width, inputImageSize.height);
-                if (inputRotation == DHImageRotationMode.Left || inputRotation == DHImageRotationMode.Right || inputRotation == DHImageRotationMode.RightFlipHorizontal
-                        || inputRotation == DHImageRotationMode.RightFlipVertical) {
+                if (inputRotation.needToSwapWidthAndHeight()) {
                     rotatedSize.width = inputImageSize.height;
                     rotatedSize.height = inputImageSize.width;
                 }

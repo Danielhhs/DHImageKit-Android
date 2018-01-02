@@ -18,4 +18,11 @@ public enum DHImageRotationMode {
     private DHImageRotationMode(int i) {
         index = i;
     }
+
+    public boolean needToSwapWidthAndHeight() {
+        if (index == 1 || index == 2 || index == 5 || index == 6) {
+            return true;
+        }
+        return false;
+    }
 }

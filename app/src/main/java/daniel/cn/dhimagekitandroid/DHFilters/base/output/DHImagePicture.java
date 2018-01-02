@@ -6,6 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import java.io.File;
+import java.nio.IntBuffer;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
@@ -48,9 +49,6 @@ public class DHImagePicture extends DHImageOutput {
         hasProcessedImage = true;
         //TO-DO: Use semaphore to ensure only one task will be executed at a time;
         //TO-DO: Run on video processing queue;
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 for (IDHImageInput target : targets) {
                     int indexOfTarget = targets.indexOf(target);
                     Integer textureIndexOfTarget = targetTextureIndices.get(indexOfTarget);
@@ -60,8 +58,6 @@ public class DHImagePicture extends DHImageOutput {
                     target.setInputFrame(mSurface, outputFrameBuffer, textureIndexOfTarget);
                     target.newFrameReady(0, textureIndexOfTarget);
                 }
-            }
-        });
         if (callback != null) {
             callback.onImageProcessFinished();
         }
@@ -126,7 +122,18 @@ public class DHImagePicture extends DHImageOutput {
             GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
         }
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+
+        convertToBitMap();
+
+        outputFrameBuffer.deactivate();
     }
 
-
+    private Bitmap convertToBitMap() {
+        final IntBuffer pixelBuffer = IntBuffer.allocate((int)pixelSizeOfImage.width * (int)pixelSizeOfImage.height);
+        GLES20.glReadPixels(0, 0, (int)pixelSizeOfImage.width, (int)pixelSizeOfImage.height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuffer);
+        int[] pixelArray = pixelBuffer.array();
+        Bitmap bitmap = Bitmap.createBitmap((int)pixelSizeOfImage.width, (int)pixelSizeOfImage.height, Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(pixelBuffer);
+        return bitmap;
+    }
 }
