@@ -8,6 +8,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageContrastFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageSaturationFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageStructureFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageWarmthFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
@@ -29,6 +30,7 @@ public class DHImageFilterFactory {
         filters.add(DHImageFilterType.Contrast);
         filters.add(DHImageFilterType.Saturation);
         filters.add(DHImageFilterType.Warmth);
+        filters.add(DHImageFilterType.Structure);
 
         return filters;
     }
@@ -44,6 +46,7 @@ public class DHImageFilterFactory {
             case Contrast: return new DHImageContrastFilter(parameters);
             case Saturation: return new DHImageSaturationFilter(parameters);
             case Warmth: return new DHImageWarmthFilter(parameters);
+            case Structure: return new DHImageStructureFilter(parameters);
         }
         return null;
     }
@@ -54,6 +57,7 @@ public class DHImageFilterFactory {
             case Contrast: return new DHImageFilterParameters(0.7f, 1.3f, 1.f);
             case Saturation: return new DHImageFilterParameters(0.5f, 1.5f, 1.f);
             case Warmth: return new DHImageFilterParameters(3500.f, 6500.f, 5000.f);
+            case Structure: return new DHImageFilterParameters(0.f, 0.25f, 0.f);
         }
         return null;
     }
