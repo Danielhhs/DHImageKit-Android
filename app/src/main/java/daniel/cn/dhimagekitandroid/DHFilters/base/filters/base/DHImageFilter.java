@@ -311,7 +311,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
                 target.setInputSize(outputFrameSize(), textureIndex);
             }
         }
-        outputFrameBuffer.unlock();
+        frameBufferForOutput().unlock();
         if (!usingNextFrameForImageCapture) {
             removeOutputFrameBuffer();
         }

@@ -16,7 +16,8 @@ public enum  DHImageFilterType {
     Fade("Fade", "渐隐"),
     Sharpen("Sharpen", "锐化"),
     Shadow("Shadow", "阴影"),
-    Highlight("Highlight", "高亮");
+    Highlight("Highlight", "高亮"),
+    GaussianBlur("GaussianBlur", "高斯模糊");
 
     private String name;
     private String chineseName;
