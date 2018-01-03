@@ -475,9 +475,9 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setMatrix4X4Uniform(final DHMatrix4X4 matrix, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
+//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+//            @Override
+//            public void run() {
                 DHImageContext.setActiveProgram(program);
                 float array[] = {matrix.one.one, matrix.one.two, matrix.one.three, matrix.one.four,
                         matrix.two.one, matrix.two.two, matrix.two.three, matrix.two.four,
@@ -485,8 +485,8 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
                         matrix.four.one, matrix.four.two, matrix.four.three, matrix.four.four};
 
                 GLES20.glUniformMatrix4fv(uniformLocation, 1, false, FloatBuffer.wrap(array));
-            }
-        });
+//            }
+//        });
     }
 
     public static float[] textureCoordinatesForRotation(DHImageRotationMode rotationMode) {

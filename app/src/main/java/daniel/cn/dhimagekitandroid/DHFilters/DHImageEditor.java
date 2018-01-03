@@ -90,6 +90,7 @@ public class DHImageEditor {
                     currentFilter = existingFilter;
                 }
                 processImage();
+                processImage();
             }
         });
     }
