@@ -5,11 +5,14 @@ import java.util.List;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterBase;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageContrastFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageGaussianBlurFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageHazeFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageHighlightFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageLinearTiltShiftFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageRadialTiltShiftFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageSaturationFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageShadowFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageSharpenFilter;
@@ -43,16 +46,18 @@ public class DHImageFilterFactory {
         filters.add(DHImageFilterType.Shadow);
         filters.add(DHImageFilterType.Highlight);
         filters.add(DHImageFilterType.GaussianBlur);
+        filters.add(DHImageFilterType.LinearTiltShift);
+        filters.add(DHImageFilterType.RadialTiltShift);
 
         return filters;
     }
 
-    public static DHImageFilter filterForType(DHImageFilterType filterType) {
+    public static DHImageFilterBase filterForType(DHImageFilterType filterType) {
         DHImageFilterParameters parameters = DHImageFilterFactory.filterParametersForType(filterType);
         return DHImageFilterFactory.filterForType(filterType, parameters);
     }
 
-    public static DHImageFilter filterForType(DHImageFilterType filterType, DHImageFilterParameters parameters) {
+    public static DHImageFilterBase filterForType(DHImageFilterType filterType, DHImageFilterParameters parameters) {
         switch (filterType) {
             case Brightness: return new DHImageBrightnessFilter(parameters);
             case Contrast: return new DHImageContrastFilter(parameters);
@@ -65,6 +70,8 @@ public class DHImageFilterFactory {
             case Shadow: return new DHImageShadowFilter(parameters);
             case Highlight: return new DHImageHighlightFilter(parameters);
             case GaussianBlur: return new DHImageGaussianBlurFilter(parameters);
+            case LinearTiltShift: return new DHImageLinearTiltShiftFilter(parameters);
+            case RadialTiltShift: return new DHImageRadialTiltShiftFilter(parameters);
         }
         return null;
     }
@@ -82,6 +89,8 @@ public class DHImageFilterFactory {
             case Shadow: return new DHImageFilterParameters(0.9f, 1.1f, 1.f);
             case Highlight: return new DHImageFilterParameters(0.9f, 1.1f, 1.f);
             case GaussianBlur: return new DHImageFilterParameters(0.f, 30.f, 0.f);
+            case LinearTiltShift: return new DHImageFilterParameters(0.1f, 0.9f, 0.5f);
+            case RadialTiltShift: return new DHImageFilterParameters(0.f, 0.5f, 0.2f);
         }
         return null;
     }
