@@ -20,7 +20,8 @@ public enum  DHImageFilterType {
     GaussianBlur("Gaussian Blur", "高斯模糊"),
     LinearTiltShift("Linear Tilt Shift", "线性聚焦"),
     RadialTiltShift("Radial Tilt Shift", "径向聚焦"),
-    Transform("Transform", "旋转");
+    Transform("Transform", "旋转"),
+    Colors("Colors", "颜色");
 
     private String name;
     private String chineseName;
