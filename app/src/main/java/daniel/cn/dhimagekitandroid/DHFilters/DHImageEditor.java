@@ -14,6 +14,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilterFactory;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterBase;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterGroup;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageToneCurveFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNormalEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageUpdatable;

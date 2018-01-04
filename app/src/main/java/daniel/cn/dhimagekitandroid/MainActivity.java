@@ -22,6 +22,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.blend.DHImageAlphaBlendFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageToneCurveFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
@@ -99,18 +100,12 @@ public class MainActivity extends AppCompatActivity implements IDHImageSurfaceLi
         DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
             @Override
             public void run() {
+                DHImageView imageView = (DHImageView)findViewById(R.id.imageView);
                 picture = new DHImagePicture(loadImage());
-                overlayPicture = new DHImagePicture(loadOverlayPicture());
-                filter = new DHImageAlphaBlendFilter();
-                picture.addTarget(filter, 0);
-                overlayPicture.addTarget(filter, 1);
-                filter.addTarget(gpuImageView);
+                DHImageToneCurveFilter toneCurveFilter = new DHImageToneCurveFilter(getApplicationContext().getResources().openRawResource(R.raw.fresh));
+                picture.addTarget(toneCurveFilter);
+                toneCurveFilter.addTarget(imageView);
                 picture.processImage();
-                overlayPicture.processImage();
-//                DHImageFilter defaultFilter = new DHImageFilter();
-//                overlayPicture.addTarget(defaultFilter);
-//                defaultFilter.addTarget(gpuImageView);
-//                overlayPicture.processImage();
             }
         });
     }

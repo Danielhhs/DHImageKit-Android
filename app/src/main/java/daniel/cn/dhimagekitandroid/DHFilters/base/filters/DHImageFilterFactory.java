@@ -18,6 +18,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageSatur
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageShadowFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageSharpenFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageStructureFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageToneCurveFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageTransformFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageVignetteFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageWarmthFilter;
@@ -52,6 +53,7 @@ public class DHImageFilterFactory {
         filters.add(DHImageFilterType.RadialTiltShift);
         filters.add(DHImageFilterType.Transform);
         filters.add(DHImageFilterType.Colors);
+        filters.add(DHImageFilterType.ToneCurve);
 
         return filters;
     }
@@ -78,6 +80,7 @@ public class DHImageFilterFactory {
             case RadialTiltShift: return new DHImageRadialTiltShiftFilter(parameters);
             case Transform: return new DHImageTransformFilter(parameters);
             case Colors: return new DHImageColorFilter(parameters);
+            case ToneCurve: return new DHImageToneCurveFilter(parameters);
         }
         return null;
     }
@@ -99,6 +102,7 @@ public class DHImageFilterFactory {
             case RadialTiltShift: return new DHImageFilterParameters(0.f, 0.5f, 0.2f);
             case Transform: return new DHImageFilterParameters(-25.f, 25.f, 0.f);
             case Colors: return new DHImageFilterParameters(0.f, 1.f, 0.5f);
+            case ToneCurve: return new DHImageFilterParameters(0.f, 1.f, 1.f);
         }
         return null;
     }
