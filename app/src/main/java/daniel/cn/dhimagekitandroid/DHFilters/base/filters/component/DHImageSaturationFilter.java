@@ -31,11 +31,6 @@ public class DHImageSaturationFilter extends DHImageFilter {
     private float saturation;
     protected int saturationUniform;
 
-    @Override
-    public DHImageFilterType getType() {
-        return DHImageFilterType.Saturation;
-    }
-
     public DHImageSaturationFilter() {
         this(0.f, 2.f, 1.f);
     }
@@ -48,6 +43,11 @@ public class DHImageSaturationFilter extends DHImageFilter {
         super(DH_VERTEX_SHADER_STRING, DH_SATURATION_FRAGMENT_SHADER, minValue, maxValue, initialValue);
         saturationUniform = filterProgram.getUniformIndex("saturation");
         setSaturation(initialValue);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Saturation;
     }
 
     public float getSaturation() {

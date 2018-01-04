@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
 
@@ -51,6 +52,11 @@ public class DHImageLinearTiltShiftFilter extends DHImageTiltShiftFilter {
         super(minValue, maxValue, initialValue);
         setCenter(initialValue);
         setRange(0.1f);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.LinearTiltShift;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
@@ -48,6 +49,11 @@ public class DHImageShadowFilter extends DHImageFilter {
 
         setShadow(initialValue);
         updateWithStrength(1.f);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Shadow;
     }
 
     public float getShadow() {

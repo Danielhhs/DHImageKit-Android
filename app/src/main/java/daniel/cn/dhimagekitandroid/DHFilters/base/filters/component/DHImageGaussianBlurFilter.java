@@ -5,6 +5,7 @@ import android.util.Log;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
 import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageTwoPassTextureSamplingFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
@@ -46,6 +47,11 @@ public class DHImageGaussianBlurFilter extends DHImageTwoPassTextureSamplingFilt
         setTexelSpacingMultiplier(1.f);
         blurRadiusInPixels = 2.f;
         shouldResizeBlurRadiusWithImageSize = false;
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.GaussianBlur;
     }
 
     public static String vertexShaderForStandardBlur(int blurRadius, float sigma) {

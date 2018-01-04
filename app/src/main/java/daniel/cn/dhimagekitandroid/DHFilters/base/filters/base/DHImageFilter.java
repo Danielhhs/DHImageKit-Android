@@ -186,6 +186,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
         updateWithInput(initialValue);
     }
 
+    @Override
     public DHImageFilterType getType() {
         return DHImageFilterType.None;
     }

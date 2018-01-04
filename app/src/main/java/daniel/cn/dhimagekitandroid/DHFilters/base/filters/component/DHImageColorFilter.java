@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHVector3;
@@ -44,6 +45,11 @@ public class DHImageColorFilter extends DHImageFilter {
 
         setColor(new DHVector3(1.f, 0.f, 0.f));
         setAdjustment(initialValue);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Colors;
     }
 
     @Override

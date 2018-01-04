@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
@@ -48,6 +49,11 @@ public class DHImageHazeFilter extends DHImageFilter {
 
         setDistance(initialValue);
         setSlope(0.f);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Fade;
     }
 
     public float getDistance() {

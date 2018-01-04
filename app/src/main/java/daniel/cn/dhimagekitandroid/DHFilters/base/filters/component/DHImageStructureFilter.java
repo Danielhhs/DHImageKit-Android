@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHVector3;
@@ -54,6 +55,11 @@ public class DHImageStructureFilter extends DHImageFilter {
         maxOutputUniform = filterProgram.getUniformIndex("maxOutput");
 
         setLevel(initialValue);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Structure;
     }
 
     public void setRed(float min, float gamma, float max, float minOutput, float maxOutput) {

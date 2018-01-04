@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
 
@@ -53,6 +54,11 @@ public class DHImageRadialTiltShiftFilter extends DHImageTiltShiftFilter {
 
         setCenter(new DHImagePoint(0.5f, 0.5f));
         setRadius(initialValue);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.RadialTiltShift;
     }
 
     public float getRadius() {

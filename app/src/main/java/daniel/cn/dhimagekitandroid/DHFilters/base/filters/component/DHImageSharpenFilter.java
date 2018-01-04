@@ -2,6 +2,7 @@ package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
 import android.opengl.GLES20;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
@@ -88,6 +89,11 @@ public class DHImageSharpenFilter extends DHImageFilter {
         imageHeightFactorUniform = filterProgram.getUniformIndex("imageHeightFactor");
 
         setSharpness(initialValue);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Sharpen;
     }
 
     public float getSharpness() {

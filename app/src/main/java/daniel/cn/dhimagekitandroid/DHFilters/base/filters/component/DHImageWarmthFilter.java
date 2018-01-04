@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
@@ -55,6 +56,11 @@ public class DHImageWarmthFilter extends DHImageFilter {
 
         setTemperature(initialValue);
         setTint(0.f);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Warmth;
     }
 
     public float getTemperature() {

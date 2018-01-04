@@ -10,4 +10,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
  */
 
 public abstract class DHImageFilterBase extends DHImageOutput implements IDHImageInput, IDHImageUpdatable {
+    public DHImageFilterType getType() {
+        return DHImageFilterType.None;
+    }
 }

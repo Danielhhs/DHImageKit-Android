@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
@@ -51,6 +52,11 @@ public class DHImageVignetteFilter extends DHImageFilter {
         setVignetteEnd(initialValue);
         setVignetteCenter(new DHImagePoint(0.5f, 0.5f));
         setVignetteColor(new DHVector3());
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Vignette;
     }
 
     public float getVignetteStart() {

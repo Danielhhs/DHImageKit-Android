@@ -2,6 +2,7 @@ package daniel.cn.dhimagekitandroid.DHFilters.base.filters.component;
 
 import android.opengl.Matrix;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
@@ -65,6 +66,11 @@ public class DHImageTransformFilter extends DHImageFilter {
 
         setIgnoreAspectRatio(true);
         setRotation(initialValue);
+    }
+
+    @Override
+    public DHImageFilterType getType() {
+        return DHImageFilterType.Transform;
     }
 
     @Override

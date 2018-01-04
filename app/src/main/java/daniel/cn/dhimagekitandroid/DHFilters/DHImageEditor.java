@@ -39,20 +39,15 @@ public class DHImageEditor {
         filters = new ArrayList<>();
         renderTarget = target;
 
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
-                picture = new DHImagePicture(image);
-                filterGroup = new DHImageFilterGroup();
+        picture = new DHImagePicture(image);
+        filterGroup = new DHImageFilterGroup();
 //                normalFilter = new DHImageNormalEffectFilter();
 //                startProcessing(normalFilter);
 
-                //TO-DO: Call on calling looper
-                if (callback != null) {
-                    callback.initCallBack();
-                }
-            }
-        });
+        //TO-DO: Call on calling looper
+        if (callback != null) {
+            callback.initCallBack();
+        }
     }
 
     public void initializeEditor(Uri uri, DHImageView target, IDHImageEditorCallBack callback) {
@@ -61,9 +56,6 @@ public class DHImageEditor {
 
     //ImageProcessing
     public void startProcessing(final DHImageEffectFilter filter) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 if (effectFilter == null) {
                     addFilter(filter);
                 } else {
@@ -71,14 +63,9 @@ public class DHImageEditor {
                 }
                 effectFilter = filter;
                 processImage();
-            }
-        });
     }
 
     public void startProcessing(final DHImageFilterType component) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 currentComponent = component;
 
                 DHImageFilterBase existingFilter = findExistingFilter(component);
@@ -90,9 +77,6 @@ public class DHImageEditor {
                     currentFilter = existingFilter;
                 }
                 processImage();
-                processImage();
-            }
-        });
     }
 
     //UpdateFilter
@@ -159,9 +143,9 @@ public class DHImageEditor {
     private DHImageFilterBase findExistingFilter(DHImageFilterType component) {
         if (filters == null) { return null;}
         for (DHImageFilterBase aFilter : filters) {
-            if (aFilter instanceof DHImageFilter) {
-                DHImageFilter filter = (DHImageFilter)aFilter;
-                if (((DHImageFilter) aFilter).getType().equals(component)) {
+            if (aFilter instanceof DHImageFilterBase) {
+                DHImageFilterBase filter = (DHImageFilterBase)aFilter;
+                if (((DHImageFilterBase) aFilter).getType().equals(component)) {
                     return aFilter;
                 }
             }
