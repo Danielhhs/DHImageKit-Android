@@ -87,7 +87,7 @@ public class DHImageViewRenderer {
 
     protected DHImageRotationMode inputRotation = DHImageRotationMode.NoRotation;
 
-    private EGLSurface mSurface, sourceSurface;
+    private EGLSurface mSurface;
     private DHImageFrameBuffer mInputFrameBuffer;
     private GLProgram displayProgram;
     private int displayPositionAttribute, displayTexCoordsAttribute;
@@ -205,7 +205,7 @@ public class DHImageViewRenderer {
             Log.e("DHImageViewRenderer", "Render before renderer is initialized");
             throw new RuntimeException("\"Render before renderer is initialized\"");
         }
-        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, sourceSurface);
+//        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
 
         DHImageContext.setActiveProgram(displayProgram);
 
@@ -246,12 +246,12 @@ public class DHImageViewRenderer {
         return mInputFrameBuffer;
     }
 
-    public void setInputFrameBuffer(EGLSurface sourceSurface, DHImageFrameBuffer inputFrameBuffer) {
+    public void setInputFrameBuffer(DHImageFrameBuffer inputFrameBuffer) {
         this.mInputFrameBuffer = inputFrameBuffer;
         if (mInputFrameBuffer != null) {
             this.mInputFrameBuffer.lock();
         }
-        this.sourceSurface = sourceSurface;
+//        this.sourceSurface = sourceSurface;
     }
 
     public DHImageRotationMode getInputRotation() {

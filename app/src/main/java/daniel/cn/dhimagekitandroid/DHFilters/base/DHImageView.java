@@ -88,8 +88,8 @@ public class DHImageView extends FrameLayout implements IDHImageInput {
     }
 
     @Override
-    public void setInputFrame(EGLSurface surface, DHImageFrameBuffer inputFrameBuffer, int index) {
-        renderer.setInputFrameBuffer(surface, inputFrameBuffer);
+    public void setInputFrame(DHImageFrameBuffer inputFrameBuffer, int index) {
+        renderer.setInputFrameBuffer(inputFrameBuffer);
     }
 
     @Override

@@ -13,7 +13,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;
 
 public interface IDHImageInput {
     public void newFrameReady(float time, int index);
-    public void setInputFrame(EGLSurface inputSurface, DHImageFrameBuffer inputFrameBuffer, int index);
+    public void setInputFrame(DHImageFrameBuffer inputFrameBuffer, int index);
     public int nextAvailableTextureIndex();
     public void setInputSize(DHImageSize size, int index);
     public void setInputRotation(DHImageRotationMode rotationMode, int index);

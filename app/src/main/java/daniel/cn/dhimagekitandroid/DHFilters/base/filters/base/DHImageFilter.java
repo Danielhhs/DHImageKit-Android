@@ -118,7 +118,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
 
     private Semaphore semaphore;
 
-    protected EGLSurface mSourceSurface;
+//    protected EGLSurface mSourceSurface;
     protected DHImageFrameBuffer firstInputFrameBuffer;
     protected GLProgram filterProgram;
     protected int filterPositionAttribute;
@@ -254,11 +254,11 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void renderToTexture(float[] vertices, float[]texCoords) {
-        if (mSurface == null) {
-            mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) outputFrameSize().width, (int) outputFrameSize().height);
-        }
+//        if (mSurface == null) {
+//            mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) outputFrameSize().width, (int) outputFrameSize().height);
+//        }
         outputFrameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(outputFrameSize(), getOutputTextureOptions(), false);
-        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, mSourceSurface);
+//        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface, mSourceSurface);
         if (preventRendering) {
             firstInputFrameBuffer.unlock();
             return;
@@ -307,7 +307,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
             if (!target.equals(getTargetToIgnoreForUpdates())) {
                 int indexOfObject = targets.indexOf(target);
                 int textureIndex = targetTextureIndices.get(indexOfObject);
-                target.setInputFrame(mSurface, frameBufferForOutput(), textureIndex);
+                target.setInputFrame(frameBufferForOutput(), textureIndex);
                 target.setInputSize(outputFrameSize(), textureIndex);
             }
         }
@@ -547,8 +547,8 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     @Override
-    public void setInputFrame(EGLSurface surface, DHImageFrameBuffer inputFrameBuffer, int index) {
-        mSourceSurface = surface;
+    public void setInputFrame(DHImageFrameBuffer inputFrameBuffer, int index) {
+//        mSourceSurface = surface;
         firstInputFrameBuffer = inputFrameBuffer;
         if (firstInputFrameBuffer != null) {
             firstInputFrameBuffer.lock();

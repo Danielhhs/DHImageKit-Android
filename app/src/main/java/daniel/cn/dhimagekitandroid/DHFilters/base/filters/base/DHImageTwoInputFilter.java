@@ -89,9 +89,9 @@ public class DHImageTwoInputFilter extends DHImageFilter {
             secondInputFrameBuffer.unlock();
             return;
         }
-        if (mSurface == null) {
-            mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) outputFrameSize().width, (int) outputFrameSize().height);
-        }
+//        if (mSurface == null) {
+//            mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) outputFrameSize().width, (int) outputFrameSize().height);
+//        }
         DHImageContext.setActiveProgram(filterProgram);
         outputFrameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(sizeOfFBO(), getOutputTextureOptions(), false);
         outputFrameBuffer.activate();
@@ -153,7 +153,7 @@ public class DHImageTwoInputFilter extends DHImageFilter {
     }
 
     @Override
-    public void setInputFrame(EGLSurface surface, DHImageFrameBuffer inputFrameBuffer, int index) {
+    public void setInputFrame(DHImageFrameBuffer inputFrameBuffer, int index) {
         if (index == 0) {
             firstInputFrameBuffer = inputFrameBuffer;
             hasFirstTexture = true;

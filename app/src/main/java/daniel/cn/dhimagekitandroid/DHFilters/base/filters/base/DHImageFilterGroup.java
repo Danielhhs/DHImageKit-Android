@@ -111,10 +111,10 @@ public class DHImageFilterGroup extends DHImageFilterBase {
     }
 
     @Override
-    public void setInputFrame(EGLSurface inputSurface, DHImageFrameBuffer inputFrameBuffer, int index) {
+    public void setInputFrame(DHImageFrameBuffer inputFrameBuffer, int index) {
         if (initialFilters == null) return;
         for (DHImageFilterBase filter : initialFilters) {
-            filter.setInputFrame(inputSurface, inputFrameBuffer, index);
+            filter.setInputFrame(inputFrameBuffer, index);
         }
     }
 

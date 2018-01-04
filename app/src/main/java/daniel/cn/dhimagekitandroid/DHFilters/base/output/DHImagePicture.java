@@ -55,7 +55,7 @@ public class DHImagePicture extends DHImageOutput {
 
                     target.setCurrentlyReceivingMonochromeInput(false);
                     target.setInputSize(pixelSizeOfImage, textureIndexOfTarget);
-                    target.setInputFrame(mSurface, outputFrameBuffer, textureIndexOfTarget);
+                    target.setInputFrame(outputFrameBuffer, textureIndexOfTarget);
                     target.newFrameReady(0, textureIndexOfTarget);
                 }
         if (callback != null) {
@@ -106,8 +106,8 @@ public class DHImagePicture extends DHImageOutput {
         pixelSizeOfImage = new DHImageSize(bitmap.getWidth(), bitmap.getHeight());
         DHImageSize pixelSizeForTexture = new DHImageSize(pixelSizeOfImage.width, pixelSizeOfImage.height);
 
-        mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int)pixelSizeForTexture.width, (int)pixelSizeForTexture.height);
-        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
+//        mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int)pixelSizeForTexture.width, (int)pixelSizeForTexture.height);
+//        DHImageContext.getCurrentContext().makeSurfaceCurrent(mSurface);
         outputFrameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(pixelSizeForTexture, getOutputTextureOptions(), false);
         outputFrameBuffer.disableReferenceCount();
 

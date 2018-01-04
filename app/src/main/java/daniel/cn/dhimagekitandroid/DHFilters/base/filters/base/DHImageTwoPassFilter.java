@@ -75,9 +75,6 @@ public class DHImageTwoPassFilter extends DHImageFilter {
             return;
         }
         DHImageContext.setActiveProgram(filterProgram);
-        if (mSurface == null) {
-            mSurface = DHImageContext.getCurrentContext().createOffScreenSurface((int) outputFrameSize().width, (int) outputFrameSize().height);
-        }
         outputFrameBuffer = DHImageContext.getCurrentContext().sharedFrameBufferCache().fetchFrameBuffer(sizeOfFBO(), getOutputTextureOptions(), false);
         outputFrameBuffer.activate();
 
