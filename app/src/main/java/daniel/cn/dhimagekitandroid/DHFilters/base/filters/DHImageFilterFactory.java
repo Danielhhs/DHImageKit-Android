@@ -25,7 +25,9 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageToneC
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageTransformFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageVignetteFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageWarmthFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageBrannanEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageFreshEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNormalEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
@@ -73,6 +75,8 @@ public class DHImageFilterFactory {
         List<DHImageEffectType> effects = new ArrayList<>();
         effects.add(DHImageEffectType.Normal);
         effects.add(DHImageEffectType.Moon);
+        effects.add(DHImageEffectType.Fresh);
+        effects.add(DHImageEffectType.Brannan);
 
         return effects;
     }
@@ -133,6 +137,8 @@ public class DHImageFilterFactory {
             case None: return new DHImageEffectFilter();
             case Normal: return new DHImageNormalEffectFilter();
             case Moon: return new DHImageMoonEffectFilter(context);
+            case Fresh: return new DHImageFreshEffectFilter(context);
+            case Brannan: return new DHImageBrannanEffectFilter(context);
         }
         return null;
     }

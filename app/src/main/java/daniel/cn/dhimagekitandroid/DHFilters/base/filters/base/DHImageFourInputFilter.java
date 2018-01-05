@@ -241,7 +241,7 @@ public class DHImageFourInputFilter extends DHImageThreeInputFilter {
 
     @Override
     public void newFrameReady(float time, int index) {
-        if (hasReceivedFirstFrame && hasReceivedSecondFrame && hasReceivedThirdFrame) {
+        if (hasReceivedFirstFrame && hasReceivedSecondFrame && hasReceivedThirdFrame && hasReceivedFourthFrame) {
             return;
         }
 

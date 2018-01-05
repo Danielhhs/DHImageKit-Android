@@ -11,7 +11,6 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEditComponent;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEffectType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
-import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilterFactory;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterBase;

@@ -9,7 +9,6 @@ import java.io.File;
 import java.nio.IntBuffer;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageContext;
-import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImagePictureCallback;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageSize;

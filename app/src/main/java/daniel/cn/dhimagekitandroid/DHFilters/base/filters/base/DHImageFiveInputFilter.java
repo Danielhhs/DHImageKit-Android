@@ -273,7 +273,7 @@ public class DHImageFiveInputFilter extends DHImageFourInputFilter {
 
     @Override
     public void newFrameReady(float time, int index) {
-        if (hasReceivedFirstFrame && hasReceivedSecondFrame && hasReceivedThirdFrame) {
+        if (hasReceivedFirstFrame && hasReceivedSecondFrame && hasReceivedThirdFrame && hasReceivedFourthFrame && hasReceivedFifthFrame) {
             return;
         }
 
@@ -354,7 +354,7 @@ public class DHImageFiveInputFilter extends DHImageFourInputFilter {
             }
         }
 
-        if (hasReceivedFirstFrame && hasReceivedSecondFrame && hasReceivedThirdFrame && hasReceivedFourthFrame) {
+        if (hasReceivedFirstFrame && hasReceivedSecondFrame && hasReceivedThirdFrame && hasReceivedFourthFrame && hasReceivedFourthFrame && hasReceivedFifthFrame) {
             float imageVertices[] = {
                     -1.0f, -1.0f,
                     1.0f, -1.0f,

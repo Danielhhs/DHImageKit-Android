@@ -107,14 +107,9 @@ public class MainActivity extends AppCompatActivity implements IDHImageSurfaceLi
 
     @Override
     public void onSurfaceTextureAvailable() {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 DHImageView imageView = (DHImageView)findViewById(R.id.imageView);
                 picture = new DHImagePicture(loadImage());
                 DHImageEditor.sharedEditor().initializeEditor(getApplicationContext(), loadImage(), imageView, null);
-            }
-        });
     }
 
     private Bitmap loadOverlayPicture() {

@@ -17,7 +17,6 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageFrameBuffer;
 import daniel.cn.dhimagekitandroid.DHFilters.base.GLProgram;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageRotationMode;
-import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageInput;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageValues;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImagePoint;
@@ -345,13 +344,8 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setIntegerUniform(final int value, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 DHImageContext.setActiveProgram(program);
                 GLES20.glUniform1i(uniformLocation, value);
-            }
-        });
     }
 
     public void setFloatUniform(float value, String uniformName) {
@@ -360,13 +354,8 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setFloatUniform(final float value, final int uniformLocation, final GLProgram program) {
-//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-//            @Override
-//            public void run() {
                 DHImageContext.setActiveProgram(program);
                 GLES20.glUniform1f(uniformLocation, value);
-//            }
-//        });
     }
 
     public void setSizeUniform(DHImageSize size, String uniformName) {
@@ -375,15 +364,10 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setSizeUniform(final DHImageSize size, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 DHImageContext.setActiveProgram(program);
                 float array[] = {size.width, size.height};
 
                 GLES20.glUniform2fv(uniformLocation, 1, FloatBuffer.wrap(array));
-            }
-        });
     }
 
     public void setPointUniform(DHImagePoint point, String uniformName) {
@@ -392,15 +376,10 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setPointUniform(final DHImagePoint point, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 DHImageContext.setActiveProgram(program);
                 float array[] = {point.x, point.y};
 
                 GLES20.glUniform2fv(uniformLocation, 1, FloatBuffer.wrap(array));
-            }
-        });
     }
 
     public void setFloatVec3Uniform(DHVector3 vector, String uniformName) {
@@ -409,15 +388,10 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setFloatVec3Uniform(final DHVector3 vector, final int uniformLocation, final GLProgram program) {
-//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-//            @Override
-//            public void run() {
                 DHImageContext.setActiveProgram(program);
                 float array[] = {vector.one, vector.two, vector.three};
 
                 GLES20.glUniform3fv(uniformLocation, 1, FloatBuffer.wrap(array));
-//            }
-//        });
     }
 
     public void setFloatVec4Uniform(DHVector4 vector, String uniformName) {
@@ -426,15 +400,10 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setFloatVec4Uniform(final DHVector4 vector, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 DHImageContext.setActiveProgram(program);
                 float array[] = {vector.one, vector.two, vector.three, vector.four};
 
                 GLES20.glUniform4fv(uniformLocation, 1, FloatBuffer.wrap(array));
-            }
-        });
     }
 
     public void setFloatArrayUniform(float[] arrayValue, int length, String uniformName) {
@@ -443,14 +412,9 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setFloatArrayUniform(final float[] arrayValue, final int length, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 DHImageContext.setActiveProgram(program);
 
                 GLES20.glUniform1fv(uniformLocation, 1, arrayValue, length);
-            }
-        });
     }
 
     public  void setMatrix3X3Uniform(DHMatrix3X3 matrix, String uniformName) {
@@ -459,17 +423,11 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setMatrix3X3Uniform(final DHMatrix3X3 matrix, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
-                DHImageContext.setActiveProgram(program);
                 float array[] = {matrix.one.one, matrix.one.two, matrix.one.three,
                 matrix.two.one, matrix.two.two, matrix.two.three,
                 matrix.three.one, matrix.three.two, matrix.three.three};
 
                 GLES20.glUniformMatrix3fv(uniformLocation, 1, false, FloatBuffer.wrap(array));
-            }
-        });
     }
 
     public void setMatrix4X4Uniform(DHMatrix4X4 matrix, String uniformName) {
@@ -478,9 +436,6 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setMatrix4X4Uniform(final DHMatrix4X4 matrix, final int uniformLocation, final GLProgram program) {
-//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-//            @Override
-//            public void run() {
                 DHImageContext.setActiveProgram(program);
                 float array[] = {matrix.one.one, matrix.one.two, matrix.one.three, matrix.one.four,
                         matrix.two.one, matrix.two.two, matrix.two.three, matrix.two.four,
@@ -488,8 +443,6 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
                         matrix.four.one, matrix.four.two, matrix.four.three, matrix.four.four};
 
                 GLES20.glUniformMatrix4fv(uniformLocation, 1, false, FloatBuffer.wrap(array));
-//            }
-//        });
     }
 
     public static float[] textureCoordinatesForRotation(DHImageRotationMode rotationMode) {

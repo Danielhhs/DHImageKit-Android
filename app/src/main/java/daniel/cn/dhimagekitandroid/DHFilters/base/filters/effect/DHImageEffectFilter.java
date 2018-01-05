@@ -22,4 +22,13 @@ public class DHImageEffectFilter extends DHImageFilterGroup {
     public float getCurrentValue() {
         return strength;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DHImageEffectFilter) {
+            DHImageEffectFilter effectFilter = (DHImageEffectFilter)obj;
+            return effectFilter.getType().equals(this.getType());
+        }
+        return false;
+    }
 }

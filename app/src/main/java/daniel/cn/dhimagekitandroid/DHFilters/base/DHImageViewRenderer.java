@@ -267,9 +267,6 @@ public class DHImageViewRenderer {
     }
 
     public void setInputImageSize(final DHImageSize inputImageSize) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
                 DHImageSize rotatedSize = new DHImageSize(inputImageSize.width, inputImageSize.height);
                 if (inputRotation.needToSwapWidthAndHeight()) {
                     rotatedSize.width = inputImageSize.height;
@@ -278,8 +275,6 @@ public class DHImageViewRenderer {
                 if (!rotatedSize.equals(inputImageSize)) {
                     recalculateViewGeometry((int)rotatedSize.width, (int)rotatedSize.height);
                 }
-            }
-        });
         this.inputImageSize = inputImageSize;
     }
 }
