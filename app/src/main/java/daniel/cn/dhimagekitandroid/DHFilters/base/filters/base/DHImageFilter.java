@@ -130,6 +130,8 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     protected DHImageRotationMode inputRotationMode;
     protected  float minValue, maxValue, initialValue;
 
+    protected float strength;
+
     public boolean currentlyReceivingMonochromeInput;
     public boolean preventRendering;
 
@@ -624,6 +626,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
 
     @Override
     public void updateWithStrength(float strength) {
+        this.strength = strength;
         setFloatUniform(strength, filterStrengthUniform, filterProgram);
     }
 

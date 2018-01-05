@@ -1,10 +1,12 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEffectType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
-import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterBase;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageColorFilter;
@@ -23,6 +25,9 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageToneC
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageTransformFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageVignetteFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageWarmthFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNormalEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
 /**
@@ -32,6 +37,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameter
 public class DHImageFilterFactory {
 
     private static List<DHImageFilterType> availableFilters;
+    private static List<DHImageEffectType> availableEffects;
 
     public static List<DHImageFilterType> availableFilters() {
         if (availableFilters != null) {
@@ -58,6 +64,17 @@ public class DHImageFilterFactory {
         filters.add(DHImageFilterType.FalseColor);
 
         return filters;
+    }
+
+    public static List<DHImageEffectType> availableEffects() {
+        if (availableEffects != null) {
+            return availableEffects;
+        }
+        List<DHImageEffectType> effects = new ArrayList<>();
+        effects.add(DHImageEffectType.Normal);
+        effects.add(DHImageEffectType.Moon);
+
+        return effects;
     }
 
     public static DHImageFilterBase filterForType(DHImageFilterType filterType) {
@@ -107,6 +124,15 @@ public class DHImageFilterFactory {
             case Colors: return new DHImageFilterParameters(0.f, 1.f, 0.5f);
             case ToneCurve: return new DHImageFilterParameters(0.f, 1.f, 1.f);
             case FalseColor: return new DHImageFilterParameters(0.f, 1.f, 0.f);
+        }
+        return null;
+    }
+
+    public static DHImageEffectFilter filterForEffect(DHImageEffectType effectType, Context context) {
+        switch (effectType) {
+            case None: return new DHImageEffectFilter();
+            case Normal: return new DHImageNormalEffectFilter();
+            case Moon: return new DHImageMoonEffectFilter(context);
         }
         return null;
     }
