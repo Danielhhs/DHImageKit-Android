@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEditComponent;
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEffectType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageFilterType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilterFactory;
@@ -29,21 +31,19 @@ public class DHImageEditor {
     private DHImagePicture picture;
     private DHImageFilterGroup filterGroup;
     private DHImageView renderTarget;
-    private DHImageNormalEffectFilter normalFilter;
     private DHImageEffectFilter effectFilter;
     private DHImageFilterType currentComponent;
     private DHImageFilterBase currentFilter;
     private List<DHImageFilterBase> filters;
 
     //Initialization
-    public void initializeEditor(final Bitmap image, DHImageView target, final IDHImageEditorCallBack callback) {
+    public void initializeEditor(final Context context, final Bitmap image, DHImageView target, final IDHImageEditorCallBack callback) {
         filters = new ArrayList<>();
         renderTarget = target;
 
         picture = new DHImagePicture(image);
         filterGroup = new DHImageFilterGroup();
-//                normalFilter = new DHImageNormalEffectFilter();
-//                startProcessing(normalFilter);
+        startProcessing(DHImageEffectType.Normal, context);
 
         //TO-DO: Call on calling looper
         if (callback != null) {
@@ -56,7 +56,8 @@ public class DHImageEditor {
     }
 
     //ImageProcessing
-    public void startProcessing(final DHImageEffectFilter filter) {
+    public void startProcessing(final DHImageEffectType effectType, Context context) {
+        DHImageEffectFilter filter = DHImageFilterFactory.filterForEffect(effectType, context);
                 if (effectFilter == null) {
                     addFilter(filter);
                 } else {
@@ -92,6 +93,13 @@ public class DHImageEditor {
         processImage();
     }
 
+    public void updateWithStrength(float strength) {
+        if (effectFilter != null) {
+            effectFilter.updateWithStrength(strength);
+            processImage();
+        }
+    }
+
     //PRIVATE HELPERS
     private void addFilter(DHImageFilterBase filter) {
         filterGroup.removeAllTargets();
@@ -117,7 +125,7 @@ public class DHImageEditor {
         DHImageFilterGroup newFilterGroup = new DHImageFilterGroup();
         DHImageFilterGroup previousFilterGroup = filterGroup;
         filterGroup = newFilterGroup;
-        for (int i = 0; i < filterGroup.filterCount(); i++) {
+        for (int i = 0; i < previousFilterGroup.filterCount(); i++) {
             DHImageFilterBase filterInGroup = previousFilterGroup.filterAtIndex(i);
             if (!filterInGroup.equals(filterToRemove)) {
                 addFilter(filterInGroup);

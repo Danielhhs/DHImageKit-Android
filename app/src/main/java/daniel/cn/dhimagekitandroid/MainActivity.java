@@ -9,14 +9,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.SeekBar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import daniel.cn.dhimagekitandroid.DHFilters.base.DHImageView;
 import daniel.cn.dhimagekitandroid.DHFilters.DHImageEditor;
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEffectType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.executors.DHImageVideoProcessExecutor;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.DHImageFilterFactory;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.blend.DHImageAlphaBlendFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.interfaces.IDHImageSurfaceListener;
 import daniel.cn.dhimagekitandroid.DHFilters.base.output.DHImagePicture;
@@ -25,8 +30,7 @@ public class MainActivity extends AppCompatActivity implements IDHImageSurfaceLi
 
     private DHImageView gpuImageView;
     private DHImagePicture picture;
-    private DHImagePicture overlayPicture;
-    private DHImageAlphaBlendFilter filter;
+    private List<DHImageEffectType> effectTypes;
 
     private ArrayList<String> filterNames;
     @Override
@@ -42,6 +46,11 @@ public class MainActivity extends AppCompatActivity implements IDHImageSurfaceLi
         Button button = (Button)findViewById(R.id.button);
         button.setOnClickListener(this);
 
+        ListView listView = (ListView)findViewById(R.id.effectListView);
+        effectTypes = DHImageFilterFactory.availableEffects();
+        EffectAdapter adapter = new EffectAdapter(this, effectTypes);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
     }
 
     private Bitmap loadImage() {
@@ -61,9 +70,13 @@ public class MainActivity extends AppCompatActivity implements IDHImageSurfaceLi
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        float brightness = seekBar.getProgress() / 100.f;
-        Log.d("hhs", brightness + "");
-        DHImageEditor.sharedEditor().updateWithInput(brightness);
+        final float percent = seekBar.getProgress() / 100.f;
+        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+            @Override
+            public void run() {
+                DHImageEditor.sharedEditor().updateWithStrength(percent);
+            }
+        });
     }
 
     @Override
@@ -78,10 +91,13 @@ public class MainActivity extends AppCompatActivity implements IDHImageSurfaceLi
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//        DHImageEditComponent component = DHImageEditComponent.allComponents().get(i);
-//        DHImageEditor.sharedEditor().startProcessing(component);
-//        SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
-//        seekBar.setProgress(50);
+        final DHImageEffectType effectType = DHImageFilterFactory.availableEffects().get(i);
+        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+            @Override
+            public void run() {
+                DHImageEditor.sharedEditor().startProcessing(effectType, getApplicationContext());
+            }
+        });
     }
 
     @Override
@@ -96,10 +112,7 @@ public class MainActivity extends AppCompatActivity implements IDHImageSurfaceLi
             public void run() {
                 DHImageView imageView = (DHImageView)findViewById(R.id.imageView);
                 picture = new DHImagePicture(loadImage());
-                DHImageMoonEffectFilter filter = new DHImageMoonEffectFilter(getApplicationContext());
-                picture.addTarget(filter);
-                filter.addTarget(imageView);
-                picture.processImage();
+                DHImageEditor.sharedEditor().initializeEditor(getApplicationContext(), loadImage(), imageView, null);
             }
         });
     }

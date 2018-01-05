@@ -15,4 +15,8 @@ public enum DHImageEffectType {
     private DHImageEffectType(String name) {
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
 }

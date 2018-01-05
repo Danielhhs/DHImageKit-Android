@@ -37,8 +37,8 @@
         android:layout_alignLeft="@+id/imageView"
         android:layout_alignStart="@+id/imageView" />
 
-    <GridView
-        android:id="@+id/gridView"
+    <ListView
+        android:id="@+id/effectListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></GridView>
+        android:layout_height="match_parent"></ListView>
 </LinearLayout>

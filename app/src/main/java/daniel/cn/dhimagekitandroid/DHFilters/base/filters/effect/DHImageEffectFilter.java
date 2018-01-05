@@ -8,7 +8,18 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterGrou
  */
 
 public class DHImageEffectFilter extends DHImageFilterGroup {
+    protected float strength;
     public DHImageEffectType getEffectType() {
         return DHImageEffectType.None;
+    }
+
+    @Override
+    public void updateWithStrength(float strength) {
+        super.updateWithStrength(strength);
+        this.strength = strength;
+    }
+
+    public float getCurrentValue() {
+        return strength;
     }
 }

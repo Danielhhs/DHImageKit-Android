@@ -57,7 +57,7 @@ public class DHImageActivity extends AppCompatActivity implements IDHImageSurfac
     @Override
     public void onSurfaceTextureAvailable() {
         DHImageView imageView = (DHImageView)findViewById(R.id.dhImageView);
-        DHImageEditor.sharedEditor().initializeEditor(loadImage(), imageView, null);
+        DHImageEditor.sharedEditor().initializeEditor(getApplicationContext(), loadImage(), imageView, null);
     }
 
     @Override

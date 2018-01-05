@@ -30,6 +30,7 @@ public class DHImageToneCurveFilter extends DHImageFilter {
     public static String DH_TONE_CURVE_FRAGMENT_SHADER = "varying highp vec2 textureCoordinate;\n" +
             " uniform sampler2D inputImageTexture;\n" +
             " uniform sampler2D toneCurveTexture;\n" +
+            " uniform mediump float strength;\n" +
             " \n" +
             " void main()\n" +
             " {\n" +
@@ -38,7 +39,7 @@ public class DHImageToneCurveFilter extends DHImageFilter {
             "     lowp float greenCurveValue = texture2D(toneCurveTexture, vec2(textureColor.g, 0.0)).g;\n" +
             "     lowp float blueCurveValue = texture2D(toneCurveTexture, vec2(textureColor.b, 0.0)).b;\n" +
             "     \n" +
-            "     gl_FragColor = vec4(redCurveValue, greenCurveValue, blueCurveValue, textureColor.a);\n" +
+            "     gl_FragColor = vec4(mix(textureColor.rgb, vec3(redCurveValue, greenCurveValue, blueCurveValue), strength), textureColor.a);\n" +
             " }";
 
     private DHImagePoint[] redControlPoints, greenControlPoints, blueControlPoints, rgbCompositeControlPoints;
