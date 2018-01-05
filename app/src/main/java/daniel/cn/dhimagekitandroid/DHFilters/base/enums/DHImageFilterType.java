@@ -22,7 +22,8 @@ public enum  DHImageFilterType {
     RadialTiltShift("Radial Tilt Shift", "径向聚焦"),
     Transform("Transform", "旋转"),
     Colors("Colors", "颜色"),
-    ToneCurve("ToneCurve", "曲线");
+    ToneCurve("ToneCurve", "曲线"),
+    FalseColor("FalseColor", "反色");
 
     private String name;
     private String chineseName;

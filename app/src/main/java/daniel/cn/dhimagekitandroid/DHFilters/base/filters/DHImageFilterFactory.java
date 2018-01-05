@@ -9,6 +9,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterBase
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageBrightnessFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageColorFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageContrastFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageFalseColorFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageGaussianBlurFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageHazeFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageHighlightFilter;
@@ -54,6 +55,7 @@ public class DHImageFilterFactory {
         filters.add(DHImageFilterType.Transform);
         filters.add(DHImageFilterType.Colors);
         filters.add(DHImageFilterType.ToneCurve);
+        filters.add(DHImageFilterType.FalseColor);
 
         return filters;
     }
@@ -81,6 +83,7 @@ public class DHImageFilterFactory {
             case Transform: return new DHImageTransformFilter(parameters);
             case Colors: return new DHImageColorFilter(parameters);
             case ToneCurve: return new DHImageToneCurveFilter(parameters);
+            case FalseColor: return new DHImageFalseColorFilter(parameters);
         }
         return null;
     }
@@ -103,6 +106,7 @@ public class DHImageFilterFactory {
             case Transform: return new DHImageFilterParameters(-25.f, 25.f, 0.f);
             case Colors: return new DHImageFilterParameters(0.f, 1.f, 0.5f);
             case ToneCurve: return new DHImageFilterParameters(0.f, 1.f, 1.f);
+            case FalseColor: return new DHImageFilterParameters(0.f, 1.f, 0.f);
         }
         return null;
     }

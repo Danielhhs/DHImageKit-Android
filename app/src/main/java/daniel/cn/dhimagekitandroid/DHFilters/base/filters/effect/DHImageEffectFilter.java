@@ -1,5 +1,6 @@
 package daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect;
 
+import daniel.cn.dhimagekitandroid.DHFilters.base.enums.DHImageEffectType;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterGroup;
 
 /**
@@ -7,4 +8,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.base.DHImageFilterGrou
  */
 
 public class DHImageEffectFilter extends DHImageFilterGroup {
+    public DHImageEffectType getEffectType() {
+        return DHImageEffectType.None;
+    }
 }

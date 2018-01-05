@@ -151,7 +151,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
         backgroundColorBlue = 0.f;
         backgroundColorAlpha = 0.f;
         minValue = 0.f;
-        maxValue = 0.f;
+        maxValue = 1.f;
         initialValue = 0.f;
 
         //TO-DO: Run on video processing Queue
@@ -407,15 +407,15 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
     }
 
     public void setFloatVec3Uniform(final DHVector3 vector, final int uniformLocation, final GLProgram program) {
-        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
-            @Override
-            public void run() {
+//        DHImageVideoProcessExecutor.runTaskOnVideoProcessQueue(new Runnable() {
+//            @Override
+//            public void run() {
                 DHImageContext.setActiveProgram(program);
                 float array[] = {vector.one, vector.two, vector.three};
 
                 GLES20.glUniform3fv(uniformLocation, 1, FloatBuffer.wrap(array));
-            }
-        });
+//            }
+//        });
     }
 
     public void setFloatVec4Uniform(DHVector4 vector, String uniformName) {
@@ -650,7 +650,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
 
     @Override
     public void updateWithInput(float input) {
-
+        updateWithStrength(input);
     }
 
     @Override
