@@ -33,6 +33,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFi
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageFreshEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageGringhamEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageHudsonEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageInkwellEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageJunoEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageLarkEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
@@ -103,6 +104,7 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Valencia);
         effects.add(DHImageEffectType.Xproll);
         effects.add(DHImageEffectType.Walden);
+        effects.add(DHImageEffectType.Inkwell);
 
         return effects;
     }
@@ -178,6 +180,7 @@ public class DHImageFilterFactory {
             case Valencia: return new DHImageValenciaEffectFilter(context);
             case Xproll: return new DHImageXprollEffectFilter(context);
             case Walden: return new DHImageWaldenEffectFilter(context);
+            case Inkwell: return new DHImageInkwellEffectFilter(context);
         }
         return null;
     }
