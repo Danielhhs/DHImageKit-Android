@@ -31,6 +31,7 @@ public class DHImageRiseEffectFilter extends DHImageEffectFilter {
             " void main()\n" +
             " {\n" +
             "     \n" +
+            "     mediump vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" +
             "     mediump vec4 texel = texture2D(inputImageTexture, textureCoordinate);\n" +
             "     mediump vec3 bbTexel = texture2D(inputImageTexture2, textureCoordinate).rgb;\n" +
             "     \n" +
@@ -44,7 +45,7 @@ public class DHImageRiseEffectFilter extends DHImageEffectFilter {
             "     mapped.b = texture2D(inputImageTexture4, vec2(texel.b, .83333)).b;\n" +
             "     mapped.a = 1.0;\n" +
             "     \n" +
-            "     gl_FragColor = vec4(mix(texel.rgb, mapped.rgb, strength), mapped.a);\n" +
+            "     gl_FragColor = vec4(mix(textureColor.rgb, mapped.rgb, strength), mapped.a);\n" +
             " }";
 
     private DHImageFourInputFilter fourInputFilter;
@@ -66,6 +67,10 @@ public class DHImageRiseEffectFilter extends DHImageEffectFilter {
         mapPicture.addTarget(fourInputFilter, 3);
         mapPicture.processImage();
         addFilter(fourInputFilter);
+
+        fourInputFilter.disableSecondFrameCheck();
+        fourInputFilter.disableThirdFrameCheck();
+        fourInputFilter.disableFourthFrameCheck();
 
         List<DHImageFilterBase> initialFilters = new ArrayList<>();
         initialFilters.add(fourInputFilter);
