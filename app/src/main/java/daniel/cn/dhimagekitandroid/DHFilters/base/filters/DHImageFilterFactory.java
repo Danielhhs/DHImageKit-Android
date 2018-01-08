@@ -28,9 +28,11 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageWarmt
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageBrannanEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageFreshEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageGringhamEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNormalEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageRiseEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageSierraEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
 /**
@@ -79,6 +81,8 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Fresh);
         effects.add(DHImageEffectType.Brannan);
         effects.add(DHImageEffectType.Rise);
+        effects.add(DHImageEffectType.Gringham);
+        effects.add(DHImageEffectType.Sierra);
 
         return effects;
     }
@@ -142,6 +146,8 @@ public class DHImageFilterFactory {
             case Fresh: return new DHImageFreshEffectFilter(context);
             case Brannan: return new DHImageBrannanEffectFilter(context);
             case Rise: return new DHImageRiseEffectFilter(context);
+            case Gringham: return new DHImageGringhamEffectFilter(context);
+            case Sierra: return new DHImageSierraEffectFilter(context);
         }
         return null;
     }

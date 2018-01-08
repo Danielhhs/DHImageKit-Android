@@ -18,13 +18,15 @@ public class DHImageVignetteFilter extends DHImageFilter {
             " uniform lowp vec3 vignetteColor;\n" +
             " uniform highp float vignetteStart;\n" +
             " uniform highp float vignetteEnd;\n" +
+            " uniform highp float strength;\n" +
             " \n" +
             " void main()\n" +
             " {\n" +
             "     lowp vec4 sourceImageColor = texture2D(inputImageTexture, textureCoordinate);\n" +
             "     lowp float d = distance(textureCoordinate, vec2(vignetteCenter.x, vignetteCenter.y));\n" +
             "     lowp float percent = smoothstep(vignetteStart, vignetteEnd, d);\n" +
-            "     gl_FragColor = vec4(mix(sourceImageColor.rgb, vignetteColor, percent), sourceImageColor.a);\n" +
+            "     highp vec3 processedColor = mix(sourceImageColor.rgb, vignetteColor, percent);\n" +
+            "     gl_FragColor = vec4(mix(sourceImageColor.rgb, processedColor, strength), sourceImageColor.a);\n" +
             " }";
 
     protected int vignetteCenterUniform, vignetteColorUniform, vignetteStartUniform, vignetteEndUniform;
@@ -52,6 +54,8 @@ public class DHImageVignetteFilter extends DHImageFilter {
         setVignetteEnd(initialValue);
         setVignetteCenter(new DHImagePoint(0.5f, 0.5f));
         setVignetteColor(new DHVector3());
+
+        updateWithStrength(1.f);
     }
 
     @Override

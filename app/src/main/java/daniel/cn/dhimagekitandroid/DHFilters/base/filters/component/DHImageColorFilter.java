@@ -16,12 +16,13 @@ public class DHImageColorFilter extends DHImageFilter {
             " uniform highp float redAdjustment;\n" +
             " uniform highp float greenAdjustment;\n" +
             " uniform highp float blueAdjustment;\n" +
+            " uniform highp float strength;\n" +
             " \n" +
             " void main()\n" +
             " {\n" +
             "     highp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" +
             "     \n" +
-            "     gl_FragColor = vec4(textureColor.r * redAdjustment, textureColor.g * greenAdjustment, textureColor.b * blueAdjustment, textureColor.a);\n" +
+            "     gl_FragColor = vec4(mix(textureColor.rgb, vec3(textureColor.r * redAdjustment, textureColor.g * greenAdjustment, textureColor.b * blueAdjustment), strength), textureColor.a);\n" +
             " }";
 
     private DHVector3 color;
@@ -45,6 +46,7 @@ public class DHImageColorFilter extends DHImageFilter {
 
         setColor(new DHVector3(1.f, 0.f, 0.f));
         setAdjustment(initialValue);
+        updateWithStrength(1.f);
     }
 
     @Override

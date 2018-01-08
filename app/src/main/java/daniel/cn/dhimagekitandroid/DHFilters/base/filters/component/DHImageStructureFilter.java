@@ -19,11 +19,13 @@ public class DHImageStructureFilter extends DHImageFilter {
             "uniform mediump vec3 levelMaximum; \n" +
             "uniform mediump vec3 minOutput; \n" +
             "uniform mediump vec3 maxOutput; \n" +
+            "uniform mediump float strength; \n" +
             "\n" +
             "void main() { \n" +
             "mediump vec4 textureColor = texture2D(inputImageTexture, textureCoordinate); \n" +
             "\n" +
-            "gl_FragColor = vec4(mix(minOutput, maxOutput, pow(min(max(textureColor.rgb - levelMinimum, vec3(0.0)) / (levelMaximum - levelMinimum), vec3(1.0)), 1.0 / levelMiddle)), textureColor.a); \n" +
+            "highp vec3 processedColor = mix(minOutput, maxOutput, pow(min(max(textureColor.rgb - levelMinimum, vec3(0.0)) / (levelMaximum - levelMinimum), vec3(1.0)), 1.0 / levelMiddle)); \n" +
+            "gl_FragColor = vec4(mix(textureColor.rgb, processedColor, strength), 1.0); \n" +
             "}";
 
     protected int levelMinimumUniform, levelMiddleUniform, levelMaximumUniform, minOutputUniform, maxOutputUniform;
@@ -55,6 +57,7 @@ public class DHImageStructureFilter extends DHImageFilter {
         maxOutputUniform = filterProgram.getUniformIndex("maxOutput");
 
         setLevel(initialValue);
+        updateWithStrength(1.f);
     }
 
     @Override
