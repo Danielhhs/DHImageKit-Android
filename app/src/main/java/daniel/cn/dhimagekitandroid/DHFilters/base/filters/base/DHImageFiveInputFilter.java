@@ -92,6 +92,7 @@ public class DHImageFiveInputFilter extends DHImageFourInputFilter {
 
         outputFrameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(sizeOfFBO(), getOutputTextureOptions(), false);
         outputFrameBuffer.activate();
+        DHImageContext.setActiveProgram(filterProgram);
 
         if (usingNextFrameForImageCapture) {
             outputFrameBuffer.lock();

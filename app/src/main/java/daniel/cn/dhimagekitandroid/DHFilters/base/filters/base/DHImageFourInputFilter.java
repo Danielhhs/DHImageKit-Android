@@ -86,6 +86,7 @@ public class DHImageFourInputFilter extends DHImageThreeInputFilter {
 
         outputFrameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(sizeOfFBO(), getOutputTextureOptions(), false);
         outputFrameBuffer.activate();
+        DHImageContext.setActiveProgram(filterProgram);
 
         if (usingNextFrameForImageCapture) {
             outputFrameBuffer.lock();
@@ -137,7 +138,7 @@ public class DHImageFourInputFilter extends DHImageThreeInputFilter {
         FloatBuffer texCoords4Buffer = ByteBuffer.allocateDirect(texCoords4.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
-        texCoords4Buffer.put(texCoords3).position(0);
+        texCoords4Buffer.put(texCoords4).position(0);
 
         GLES20.glVertexAttribPointer(filterPositionAttribute, 2, GLES20.GL_FLOAT, false, 0, vertexBuffer);
         GLES20.glVertexAttribPointer(filterTexCoordAttribute, 2, GLES20.GL_FLOAT, false, 0, texCoordsBuffer);

@@ -10,7 +10,8 @@ public enum DHImageEffectType {
     Normal("Normal"),
     Moon("Moon"),
     Fresh("Fresh"),
-    Brannan("Brannan");
+    Brannan("Brannan"),
+    Rise("Rise");
 
     private String name;
 

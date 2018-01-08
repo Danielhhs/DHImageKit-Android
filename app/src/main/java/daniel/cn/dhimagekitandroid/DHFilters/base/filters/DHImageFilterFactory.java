@@ -30,6 +30,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFi
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageFreshEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNormalEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageRiseEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
 /**
@@ -77,6 +78,7 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Moon);
         effects.add(DHImageEffectType.Fresh);
         effects.add(DHImageEffectType.Brannan);
+        effects.add(DHImageEffectType.Rise);
 
         return effects;
     }
@@ -139,6 +141,7 @@ public class DHImageFilterFactory {
             case Moon: return new DHImageMoonEffectFilter(context);
             case Fresh: return new DHImageFreshEffectFilter(context);
             case Brannan: return new DHImageBrannanEffectFilter(context);
+            case Rise: return new DHImageRiseEffectFilter(context);
         }
         return null;
     }

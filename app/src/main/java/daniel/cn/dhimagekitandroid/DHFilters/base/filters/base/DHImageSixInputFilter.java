@@ -71,6 +71,7 @@ public class DHImageSixInputFilter extends DHImageFiveInputFilter {
         filterInputTextureUniform6 = filterProgram.getUniformIndex("inputImageTexture6");
 
         GLES20.glEnableVertexAttribArray(filterSixthTextureCoordinateAttribute);
+        updateWithStrength(1.f);
     }
 
     @Override
@@ -97,6 +98,7 @@ public class DHImageSixInputFilter extends DHImageFiveInputFilter {
 
         outputFrameBuffer = DHImageContext.sharedFrameBufferCache().fetchFrameBuffer(sizeOfFBO(), getOutputTextureOptions(), false);
         outputFrameBuffer.activate();
+        DHImageContext.setActiveProgram(filterProgram);
 
         if (usingNextFrameForImageCapture) {
             outputFrameBuffer.lock();
