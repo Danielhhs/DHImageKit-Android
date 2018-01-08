@@ -31,6 +31,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageCremaEff
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageFreshEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageGringhamEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageJunoEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageLarkEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNashvilleEffectFilter;
@@ -91,6 +92,7 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Lark);
         effects.add(DHImageEffectType.Nashville);
         effects.add(DHImageEffectType.Clarendon);
+        effects.add(DHImageEffectType.Juno);
 
         return effects;
     }
@@ -160,6 +162,7 @@ public class DHImageFilterFactory {
             case Lark: return new DHImageLarkEffectFilter(context);
             case Nashville: return new DHImageNashvilleEffectFilter(context);
             case Clarendon: return new DHImageClarendonEffectFilter(context);
+            case Juno: return new DHImageJunoEffectFilter(context);
         }
         return null;
     }
