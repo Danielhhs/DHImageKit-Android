@@ -22,7 +22,6 @@ public class DHImageAlphaBlendFilter extends DHImageTwoInputFilter {
             "\t lowp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" +
             "\t lowp vec4 textureColor2 = texture2D(inputImageTexture2, textureCoordinate2);\n" +
             "\t \n" +
-//            "\t gl_FragColor = textureColor2;\n" +
             "\t gl_FragColor = vec4(mix(textureColor.rgb, textureColor2.rgb, textureColor2.a * mixturePercent), textureColor.a);\n" +
             " }";
 

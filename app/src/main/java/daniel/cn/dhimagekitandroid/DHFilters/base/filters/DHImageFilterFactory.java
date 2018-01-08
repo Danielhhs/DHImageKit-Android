@@ -33,8 +33,10 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFi
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageFreshEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageGringhamEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageHudsonEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageIcyEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageInkwellEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageJunoEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageKelvinEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageLarkEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNashvilleEffectFilter;
@@ -105,6 +107,8 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Xproll);
         effects.add(DHImageEffectType.Walden);
         effects.add(DHImageEffectType.Inkwell);
+        effects.add(DHImageEffectType.Kelvin);
+        effects.add(DHImageEffectType.Icy);
 
         return effects;
     }
@@ -181,6 +185,8 @@ public class DHImageFilterFactory {
             case Xproll: return new DHImageXprollEffectFilter(context);
             case Walden: return new DHImageWaldenEffectFilter(context);
             case Inkwell: return new DHImageInkwellEffectFilter(context);
+            case Kelvin: return new DHImageKelvinEffectFilter(context);
+            case Icy: return new DHImageIcyEffectFilter(context);
         }
         return null;
     }

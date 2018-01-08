@@ -15,6 +15,7 @@ public class DHImageWarmthFilter extends DHImageFilter {
             "varying highp vec2 textureCoordinate;\n" +
             " \n" +
             "uniform lowp float temperature;\n" +
+            "uniform lowp float strength;\n" +
             "uniform lowp float tint;\n" +
             "\n" +
             "const lowp vec3 warmFilter = vec3(0.93, 0.54, 0.0);\n" +
@@ -35,7 +36,8 @@ public class DHImageWarmthFilter extends DHImageFilter {
             "\t\t(rgb.g < 0.5 ? (2.0 * rgb.g * warmFilter.g) : (1.0 - 2.0 * (1.0 - rgb.g) * (1.0 - warmFilter.g))), \n" +
             "\t\t(rgb.b < 0.5 ? (2.0 * rgb.b * warmFilter.b) : (1.0 - 2.0 * (1.0 - rgb.b) * (1.0 - warmFilter.b))));\n" +
             "\n" +
-            "\tgl_FragColor = vec4(mix(rgb, processed, temperature), source.a);\n" +
+            "\tprocessed = mix(rgb, processed, temperature);\n" +
+            "\tgl_FragColor = vec4(mix(rgb, processed, strength), source.a);\n" +
             "}";
 
     protected int temperatureUniform, tintUniform;
@@ -56,6 +58,7 @@ public class DHImageWarmthFilter extends DHImageFilter {
 
         setTemperature(initialValue);
         setTint(0.f);
+        updateWithStrength(1.f);
     }
 
     @Override

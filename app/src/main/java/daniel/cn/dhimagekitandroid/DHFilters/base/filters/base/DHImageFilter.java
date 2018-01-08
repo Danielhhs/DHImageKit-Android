@@ -185,6 +185,7 @@ public class DHImageFilter extends DHImageFilterBase implements IDHImageValues {
         this.maxValue = maxValue;
         this.initialValue = initialValue;
         updateWithInput(initialValue);
+        updateWithStrength(1.f);
     }
 
     @Override

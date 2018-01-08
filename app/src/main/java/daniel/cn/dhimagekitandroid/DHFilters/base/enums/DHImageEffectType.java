@@ -24,7 +24,9 @@ public enum DHImageEffectType {
     Valencia("Valencia"),
     Xproll("Xproll"),
     Walden("Walden"),
-    Inkwell("Inkwell");
+    Inkwell("Inkwell"),
+    Kelvin("Kelvin"),
+    Icy("Icy");
 
     private String name;
 
