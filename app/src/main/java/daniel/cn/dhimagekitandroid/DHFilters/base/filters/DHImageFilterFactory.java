@@ -32,6 +32,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageCremaEff
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageFreshEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageGringhamEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageHudsonEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageJunoEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageLarkEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageMoonEffectFilter;
@@ -95,6 +96,7 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Clarendon);
         effects.add(DHImageEffectType.Juno);
         effects.add(DHImageEffectType.Amaro);
+        effects.add(DHImageEffectType.Hudson);
 
         return effects;
     }
@@ -166,6 +168,7 @@ public class DHImageFilterFactory {
             case Clarendon: return new DHImageClarendonEffectFilter(context);
             case Juno: return new DHImageJunoEffectFilter(context);
             case Amaro: return new DHImageAmaroEffectFilter(context);
+            case Hudson: return new DHImageHudsonEffectFilter(context);
         }
         return null;
     }

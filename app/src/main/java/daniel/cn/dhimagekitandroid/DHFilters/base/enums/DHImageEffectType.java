@@ -19,7 +19,8 @@ public enum DHImageEffectType {
     Nashville("Nashville"),
     Clarendon("Clarendon"),
     Juno("Juno"),
-    Amaro("Amaro");
+    Amaro("Amaro"),
+    Hudson("Hudson");
 
     private String name;
 
