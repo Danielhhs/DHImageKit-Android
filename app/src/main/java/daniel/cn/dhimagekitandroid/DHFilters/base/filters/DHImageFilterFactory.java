@@ -41,6 +41,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNormalEf
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageRiseEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageSierraEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageValenciaEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageWaldenEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageXprollEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
@@ -101,6 +102,7 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Hudson);
         effects.add(DHImageEffectType.Valencia);
         effects.add(DHImageEffectType.Xproll);
+        effects.add(DHImageEffectType.Walden);
 
         return effects;
     }
@@ -175,6 +177,7 @@ public class DHImageFilterFactory {
             case Hudson: return new DHImageHudsonEffectFilter(context);
             case Valencia: return new DHImageValenciaEffectFilter(context);
             case Xproll: return new DHImageXprollEffectFilter(context);
+            case Walden: return new DHImageWaldenEffectFilter(context);
         }
         return null;
     }

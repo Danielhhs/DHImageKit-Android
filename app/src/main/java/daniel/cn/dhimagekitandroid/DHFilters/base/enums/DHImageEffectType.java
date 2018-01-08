@@ -22,7 +22,8 @@ public enum DHImageEffectType {
     Amaro("Amaro"),
     Hudson("Hudson"),
     Valencia("Valencia"),
-    Xproll("Xproll");
+    Xproll("Xproll"),
+    Walden("Walden");
 
     private String name;
 
