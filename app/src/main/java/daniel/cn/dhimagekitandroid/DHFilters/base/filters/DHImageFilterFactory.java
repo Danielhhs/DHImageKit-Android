@@ -26,6 +26,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageTrans
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageVignetteFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageWarmthFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageBrannanEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageCremaEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageFreshEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageGringhamEffectFilter;
@@ -83,6 +84,7 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Rise);
         effects.add(DHImageEffectType.Gringham);
         effects.add(DHImageEffectType.Sierra);
+        effects.add(DHImageEffectType.Crema);
 
         return effects;
     }
@@ -148,6 +150,7 @@ public class DHImageFilterFactory {
             case Rise: return new DHImageRiseEffectFilter(context);
             case Gringham: return new DHImageGringhamEffectFilter(context);
             case Sierra: return new DHImageSierraEffectFilter(context);
+            case Crema: return new DHImageCremaEffectFilter(context);
         }
         return null;
     }

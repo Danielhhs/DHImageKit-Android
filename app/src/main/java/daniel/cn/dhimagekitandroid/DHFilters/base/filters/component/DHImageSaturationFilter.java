@@ -15,6 +15,7 @@ public class DHImageSaturationFilter extends DHImageFilter {
             " \n" +
             " uniform sampler2D inputImageTexture;\n" +
             " uniform lowp float saturation;\n" +
+            " uniform lowp float strength;\n" +
             " \n" +
             " const mediump vec3 luminanceWeighting = vec3(0.2125, 0.7154, 0.0721);\n" +
             " \n" +
@@ -24,7 +25,8 @@ public class DHImageSaturationFilter extends DHImageFilter {
             "    lowp float luminance = dot(textureColor.rgb, luminanceWeighting);\n" +
             "    lowp vec3 greyScaleColor = vec3(luminance);\n" +
             "    \n" +
-            "\tgl_FragColor = vec4(mix(greyScaleColor, textureColor.rgb, saturation), textureColor.w);\n" +
+            "\tlowp vec3 processedColor = mix(greyScaleColor, textureColor.rgb, saturation);\n" +
+            "\tgl_FragColor = vec4(mix(textureColor.rgb, processedColor, strength), textureColor.w);\n" +
             "\t \n" +
             " }";
 
@@ -43,6 +45,7 @@ public class DHImageSaturationFilter extends DHImageFilter {
         super(DH_VERTEX_SHADER_STRING, DH_SATURATION_FRAGMENT_SHADER, minValue, maxValue, initialValue);
         saturationUniform = filterProgram.getUniformIndex("saturation");
         setSaturation(initialValue);
+        updateWithStrength(1.f);
     }
 
     @Override
