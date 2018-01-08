@@ -329,10 +329,6 @@ public class DHImageToneCurveFilter extends DHImageFilter {
                 toneCurveByteArray[currentCurveIndex * 4 + 2] = (byte)Math.min(Math.max(b + rgbCompositeCurve[b], 0), 255);
                 toneCurveByteArray[currentCurveIndex * 4 + 3] = (byte)255;
             }
-
-            for (int i = 0; i < toneCurveByteArray.length; i++) {
-                Log.d(LOG_TAG, "toneCurve[" + i + "] = " + toneCurveByteArray[i]);
-            }
             GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, 256 /*width*/, 1 /*height*/, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, ByteBuffer.wrap(toneCurveByteArray));
         }
     }
