@@ -40,6 +40,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNashvill
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageNormalEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageRiseEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageSierraEffectFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageValenciaEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.structs.DHImageFilterParameters;
 
 /**
@@ -97,6 +98,7 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Juno);
         effects.add(DHImageEffectType.Amaro);
         effects.add(DHImageEffectType.Hudson);
+        effects.add(DHImageEffectType.Valencia);
 
         return effects;
     }
@@ -169,6 +171,7 @@ public class DHImageFilterFactory {
             case Juno: return new DHImageJunoEffectFilter(context);
             case Amaro: return new DHImageAmaroEffectFilter(context);
             case Hudson: return new DHImageHudsonEffectFilter(context);
+            case Valencia: return new DHImageValenciaEffectFilter(context);
         }
         return null;
     }
