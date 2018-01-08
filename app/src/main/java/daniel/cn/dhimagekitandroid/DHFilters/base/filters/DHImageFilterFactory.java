@@ -25,6 +25,7 @@ import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageToneC
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageTransformFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageVignetteFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.component.DHImageWarmthFilter;
+import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageAmaroEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageBrannanEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageClarendonEffectFilter;
 import daniel.cn.dhimagekitandroid.DHFilters.base.filters.effect.DHImageCremaEffectFilter;
@@ -93,6 +94,7 @@ public class DHImageFilterFactory {
         effects.add(DHImageEffectType.Nashville);
         effects.add(DHImageEffectType.Clarendon);
         effects.add(DHImageEffectType.Juno);
+        effects.add(DHImageEffectType.Amaro);
 
         return effects;
     }
@@ -163,6 +165,7 @@ public class DHImageFilterFactory {
             case Nashville: return new DHImageNashvilleEffectFilter(context);
             case Clarendon: return new DHImageClarendonEffectFilter(context);
             case Juno: return new DHImageJunoEffectFilter(context);
+            case Amaro: return new DHImageAmaroEffectFilter(context);
         }
         return null;
     }
